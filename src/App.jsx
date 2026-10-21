@@ -10,7 +10,8 @@ import { Contact, NotFound } from './pages/Contact.jsx'
 import Events from './pages/Events.jsx'
 import Stories from './pages/Stories.jsx'
 import AiAgents from './pages/AiAgents.jsx'
-import { Announcement, RevealOnScroll, SupportChip } from './components/Motion.jsx'
+import { Announcement, RevealOnScroll } from './components/Motion.jsx'
+import { SupportWidget } from './components/Support.jsx'
 
 export default function App() {
   return (
@@ -37,7 +38,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
-      <SupportChip />
+      <SupportWidget />
     </>
   )
 }

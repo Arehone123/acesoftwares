@@ -6,6 +6,8 @@ export const FEE_SHARE = 0.3 // Share of saved-hour value we charge on workflows
 export const CONTACT_EMAILS = ['info@acetheacademia.com', 'n8ncapetown@gmail.com']
 export const CONTACT_EMAIL = CONTACT_EMAILS[0]
 export const SUPPORT_HOURS = '24/7'
+// n8n workflow that answers every support / contact request from the site (see /n8n/ in the repo).
+export const SUPPORT_WEBHOOK = 'https://arehonematodzi.app.n8n.cloud/webhook/acesoftwares-support'
 // Set these to a number (Rands) to show a price; null shows "Fee on request".
 export const TRAINING_FEE = null
 export const PILOT_FEE = null

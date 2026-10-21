@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { CONTACT_EMAILS, SUPPORT_HOURS, tiers } from '../data/site.js'
+import { mailtoFallback, sendSupportRequest } from '../lib/support.js'
+import { SupportReply } from '../components/Support.jsx'
 
 const interests = ['Not sure yet — audit me', ...tiers.map((t) => `Apps — ${t.name}`), 'Workflows — pay per hour saved', 'AI agents — Starter', 'AI agents — Pro', 'AI agents — Enterprise', 'Free n8n workshop', 'Corporate training', 'Pilot implementation']
 
@@ -14,16 +16,17 @@ export function Contact() {
     interest: state?.interest || interests[0],
     message: state?.message || '',
   })
-  const [sent, setSent] = useState(false)
+  const [trap, setTrap] = useState('') // honeypot: real visitors never see or fill this
+  const [state_, setState] = useState({ phase: 'idle' }) // idle | sending | done | error
   const up = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
-  // No backend yet: open the visitor's email client with the details filled in.
-  const submit = (e) => {
+  // Sends the request to our n8n support workflow, which answers instantly or hands over to a person.
+  const submit = async (e) => {
     e.preventDefault()
-    const subject = `Automation audit request — ${form.company || form.name}`
-    const body = [`Name: ${form.name}`, `Company: ${form.company}`, `Email: ${form.email}`, `Interested in: ${form.interest}`, '', form.message].join('\n')
-    window.location.href = `mailto:${CONTACT_EMAILS.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    setSent(true)
+    if (trap) return setState({ phase: 'done', status: 'success', message: 'Thanks, we’ve received your message.' })
+    setState({ phase: 'sending' })
+    const res = await sendSupportRequest({ ...form, source: 'contact-page' })
+    setState(res.ok ? { phase: 'done', ...res } : { phase: 'error', ...res })
   }
 
   return (
@@ -49,7 +52,15 @@ export function Contact() {
             </div>
           </div>
         </div>
+        {state_.phase === 'done' ? (
+          <SupportReply
+            status={state_.status}
+            message={state_.message}
+            onReset={() => { setState({ phase: 'idle' }); setForm({ ...form, message: '' }) }}
+          />
+        ) : (
         <form className="cform" onSubmit={submit}>
+          <input className="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" name="website" value={trap} onChange={(e) => setTrap(e.target.value)} />
           <div className="cform__row">
             <label><span>NAME</span><input required autoComplete="name" value={form.name} onChange={up('name')} /></label>
             <label><span>COMPANY</span><input autoComplete="organization" value={form.company} onChange={up('company')} /></label>
@@ -58,12 +69,20 @@ export function Contact() {
           <label><span>INTERESTED IN</span>
             <select value={form.interest} onChange={up('interest')}>{interests.map((i) => <option key={i}>{i}</option>)}</select>
           </label>
-          <label><span>WHAT PROCESS TAKES THE MOST TIME?</span><textarea rows={5} value={form.message} onChange={up('message')} /></label>
-          <button type="submit" className="btn btn--accent btn--block">BOOK MY FREE AUDIT</button>
-          <p className="muted small center">
-            {sent ? `Thanks! If your email app didn’t open, write to ${CONTACT_EMAILS.join(' or ')}.` : 'This opens your email app with the details filled in.'}
-          </p>
+          <label><span>WHAT PROCESS TAKES THE MOST TIME? (OR ASK US ANYTHING)</span><textarea required rows={5} value={form.message} onChange={up('message')} /></label>
+          <button type="submit" className="btn btn--accent btn--block" disabled={state_.phase === 'sending'}>
+            {state_.phase === 'sending' ? <><span className="spinner spinner--light" /> SENDING…</> : 'BOOK MY FREE AUDIT'}
+          </button>
+          {state_.phase === 'error' ? (
+            <p className="cform__error">
+              <Icon name="alert" size={15} /> {state_.message} Please try again, or{' '}
+              <a className="ulink" href={mailtoFallback(form)}>send it by email instead</a>.
+            </p>
+          ) : (
+            <p className="muted small center">Our support assistant replies instantly, and a person follows up on every request, {SUPPORT_HOURS}.</p>
+          )}
         </form>
+        )}
       </div>
     </section>
   )

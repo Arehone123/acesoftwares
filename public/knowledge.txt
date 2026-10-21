@@ -1,0 +1,83 @@
+# AceSoftwares — support knowledge base
+AceSoftwares is an automation agency that builds business operating systems, n8n workflows and AI agents.
+Support: 24/7 for every client. Email: info@acetheacademia.com or n8ncapetown@gmail.com. Website: https://acesoftwares.tech
+
+## Pricing
+- Products (Ace OS apps): monthly retainer billed at R450 per hour. Unused hours roll over for one month.
+  - Starter: R4,500/month (10 hours). One product, kept healthy and improving. Includes: 1 Ace OS product, hosted & maintained; Bug fixes & minor tweaks; 24/7 support line & monitoring; Fixes next business day; Monthly usage report.
+  - Growth: R11,250/month (25 hours). Several products, customised to how you work. Includes: Up to 3 Ace OS products; Custom fields, reports & dashboards; New mini-workflows each month; 24/7 support, fixes within 12 hours; Monthly strategy call.
+  - Scale: R22,500/month (50 hours). A full digital back office for your business. Includes: All 8 Ace OS products available; Dedicated automation engineer; 24/7 priority support, fixes within 4 hours; Custom integrations & AI agents; Quarterly ROI review.
+- Workflows: priced on hours saved. We charge 30% of the value of the hours a workflow saves; the client keeps 70%. If it saves nothing, the client pays nothing.
+- Free discovery audit for every new client. 30 days of fixes included after launch.
+- Software and AI accounts: clients can use their own accounts and pay providers at cost, or choose a managed AI plan.
+
+## AI agents (managed AI plans)
+We build AI agents on n8n. Clients can power them with their own AI keys (at cost) or our managed AI models on a fixed monthly plan.
+- Starter: R500 – R1,000/month. 10,000 lightweight / standard executions. About 20,000 pages (~10 million words) a month. Good for: Email & WhatsApp triage, FAQ / support answers, Short summaries & replies, Data extraction from forms.
+- Pro: R2,500 – R5,000/month. 50,000 multi-step LLM executions + document parsing. About 100,000 pages (~50 million words) a month. Good for: Invoice & contract parsing, CV screening & ranking, Multi-step research agents, Tender document summaries.
+- Enterprise: From R10,000/month. Custom: heavy document processing & multi-agent systems. About 700,000 pages (~350 million words) a month. Good for: Bulk unstructured extraction, Multi-agent orchestration, Large knowledge bases (RAG), Premium reasoning models.
+- 1 page is assumed to be about 500 words.
+
+## Training, workshops and pilots
+- Free n8n workshops & community events: Free. Hands-on sessions where you build your first automations with n8n. Free to attend: the venue, catering and materials are paid for by n8n.
+- Corporate n8n training: fee on request. Private training for your team, on your processes and your data. Your staff leave able to build, run and maintain their own workflows.
+- Pilot implementation: fee on request. One high-value process automated end to end in your environment, so you can measure the hours saved before committing to a wider rollout.
+
+## Products
+- Mining Pulse (Live mine operations intelligence): Production, fleet health, safety incidents and compliance from every shift, collected in one live dashboard. Workflows pull data from sensors, spreadsheets and shift reports automatically. Features: Shift & production tracking, Fleet downtime alerts, Safety incident logging, Compliance reporting.
+- Community Pulse (Stakeholder & community engagement): Log community grievances, stakeholder meetings and social commitments, and track sentiment over time. WhatsApp intake and AI triage help the right team respond quickly. Features: WhatsApp grievance intake, AI sentiment & triage, Commitment tracking, Stakeholder register.
+- Property OS (Property & tenant management): Leases, tenants, rent collection and maintenance in one system. Rent reminders, arrears follow-ups and maintenance dispatch run automatically. Features: Lease & tenant records, Automated rent reminders, Maintenance ticketing, Owner statements.
+- Admin OS (Back-office admin, automated): Approvals, documents, tasks and scheduling for the back office. Admin OS sends requests to the right approver, files documents and chases outstanding items for you. Features: Approval workflows, Smart document filing, Task & deadline chasing, Meeting scheduling.
+- HR OS (People operations end-to-end): Onboarding, leave, payroll inputs and performance reviews in one place. New hires get their contracts, accounts and induction schedule set up automatically. Features: Automated onboarding, Leave requests & balances, Payroll input exports, Performance check-ins.
+- Bid OS (Tenders & bids, won faster): Bid OS pulls new tenders from public portals, uses AI to score how well each one fits, checks compliance documents such as tax clearance and B-BBEE certificates, and tracks every deadline. Features: Daily tender scraping, AI fit score & summary, Compliance document vault, Deadline countdowns.
+- Hirable-ai (AI-powered recruitment): Hirable-ai screens CVs, ranks candidates against the job spec, books interviews and keeps applicants updated, so recruiters can spend their time talking to the best people. Features: AI CV screening & ranking, Interview auto-scheduling, Candidate updates, Job-spec generator.
+- Finance OS (Finance ops without the spreadsheets): Invoice capture, reconciliation, debtor follow-ups and cash-flow reporting. Finance OS reads supplier invoices, matches them to POs and syncs with Sage or Xero. Features: Invoice OCR & capture, Bank reconciliation, Debtor reminders, Cash-flow dashboards.
+
+## Solutions
+- IT & Data Centre Ops: Every monitoring tool, ticket queue and on-call rota in your stack, joined up. Delivered with our data centre management partner, Sovrinn.
+- Finance Operations: Invoices, reconciliations, debtors and reporting, automated end to end and connected to Sage or Xero.
+- Mining & Community: Mining Pulse and Community Pulse connect production, safety and stakeholder engagement in one live picture.
+
+## Example workflows
+- Capture supplier invoices from email and post them to Sage or Xero [Finance, saves ~12 hrs/week]: Supplier invoices arriving in a shared mailbox are read by AI, matched against open purchase orders and posted straight into your accounting system. Anything that doesn’t match is sent to an approver in Teams with the reason.
+- Scan public tender portals daily and score each tender with AI [Tenders, saves ~10 hrs/week]: Every morning the workflow checks public tender portals, reads each new tender and scores it against your company profile. Good fits become bids in Bid OS and the team gets a WhatsApp summary.
+- Screen and rank CVs against a job spec, then book interviews [HR, saves ~15 hrs/week]: Applications are parsed, scored against the job spec with written reasons and sorted into a shortlist. Shortlisted candidates receive a booking link; everyone else gets a respectful update.
+- Set up accounts, equipment and induction for every new hire [HR, saves ~6 hrs/week]: The moment an offer is signed, the new starter’s email account, laptop request, payroll record and induction calendar are all created in parallel, and the manager is told when everything is ready.
+- Qualify WhatsApp leads with AI and add them to your CRM [Sales, saves ~8 hrs/week]: New WhatsApp enquiries are answered instantly, qualified by an AI agent and added to the CRM. Hot leads go straight to a salesperson with the full conversation attached.
+- Send escalating payment reminders to overdue debtors [Finance, saves ~5 hrs/week]: Overdue accounts receive reminders that get firmer over time, and finance is only involved when an account is seriously late. Payments are detected and reminders stop automatically.
+- Deduplicate and route data centre alerts to the right engineer [IT Ops, saves ~9 hrs/week]: Built with our data centre partner Sovrinn in mind: alerts from monitoring tools are grouped, enriched with context and classified. Critical incidents page the on-call engineer; everything else becomes a ticket.
+- Compile a daily operations report from sensors and spreadsheets [Operations, saves ~7 hrs/week]: Production figures, downtime and incidents from the previous day are pulled together and summarised in plain language, with the PDF in management’s inbox before the morning meeting.
+- Turn tenant WhatsApp messages into dispatched maintenance jobs [Operations, saves ~6 hrs/week]: Tenants report problems with a photo on WhatsApp. The workflow works out the category and urgency, opens a ticket, dispatches the right contractor and keeps the tenant updated.
+- Log community grievances from WhatsApp and escalate urgent ones [Operations, saves ~8 hrs/week]: Community members report issues in their own language. Messages are translated, classified and logged, and anything urgent reaches a community liaison officer immediately.
+- Review contracts with AI and flag risky clauses for legal [Document Ops, saves ~6 hrs/week]: Contracts uploaded to SharePoint are read clause by clause and compared with your standard positions. Low-risk documents are approved; anything unusual goes to legal with highlighted clauses.
+- Track tax, B-BBEE and CIPC documents and warn before they expire [Tenders, saves ~3 hrs/week]: Compliance documents needed for tenders are checked every week. Owners are warned well before anything expires, so you’re never disqualified on a technicality.
+- Answer common support questions with an AI agent and escalate the rest [AI, saves ~11 hrs/week]: An AI agent answers routine questions using your own knowledge base and escalates anything complex or urgent to a person, with the full conversation and a suggested reply.
+- Chat with your company documents using a private AI assistant [AI, saves ~9 hrs/week]: Staff ask questions in Teams and get answers drawn from your policies, manuals and procedures, with links to the source documents so they can check.
+- Handle leave requests on WhatsApp with one-tap manager approval [HR, saves ~4 hrs/week]: Staff request leave in a WhatsApp chat. Balances are checked, managers approve with one tap and the team calendar and payroll inputs update automatically.
+- Reconcile bank statement lines automatically and surface exceptions [Finance, saves ~10 hrs/week]: Each day’s bank lines are matched to invoices and payments using rules and AI. Your team only looks at the short list of exceptions instead of every transaction.
+- Generate a weekly rack power and capacity report for the data centre [IT Ops, saves ~5 hrs/week]: Power draw, temperature and rack utilisation are collected every week and turned into a short capacity report with a forecast, so you can plan expansion before you run out of headroom.
+- Turn meeting transcripts into minutes and assigned action items [AI, saves ~4 hrs/week]: After each meeting the transcript is summarised into minutes, decisions and action items. Actions are assigned to owners with due dates and everyone gets the minutes by email.
+
+## Partners
+- n8n (Workflow automation platform): The workflow engine behind our automations. It can be self-hosted, so your data stays where you need it.
+- Sovrinn (Data centre management): Our data centre management partner. Together we automate monitoring, alerting and operations for the infrastructure your systems run on.
+
+## Frequently asked questions
+Q: Do you offer 24/7 support?
+A: Yes. Every client gets 24/7 support: workflows are monitored around the clock, and you can reach us any time by email at info@acetheacademia.com or n8ncapetown@gmail.com. Fix times depend on your plan.
+Q: Are the n8n workshops really free?
+A: Yes. Our community workshops and events are sponsored by n8n, so there is no cost to attend. Corporate training and pilot implementations are separate paid services.
+Q: How do you measure "hours saved"?
+A: During the audit we time the manual process and agree a baseline with you. After launch, n8n logs every execution. Hours saved = executions × agreed minutes saved per execution, and it’s shown in your monthly report.
+Q: What does the R450/hour retainer cover?
+A: Hosting management, monitoring, bug fixes, API changes, new features and small workflows for your Ace OS products. You choose how many hours per month you need. Unused hours roll over for one month.
+Q: Why n8n?
+A: n8n is open and extensible. It can be self-hosted, which keeps sensitive data in South Africa, and it connects to hundreds of services. It also lets us mix visual workflows with custom code and AI agents when a process needs it.
+Q: Who pays for software subscriptions and AI tokens?
+A: Your choice. Bring your own AI keys and subscriptions in your company’s name and pay providers directly at cost, or use our managed AI plans: a fixed monthly price that includes the AI usage, with no surprise token bills.
+Q: How much can an AI agent read on each plan?
+A: As a guide: Starter covers about 20,000 pages (roughly 10 million words) a month, Pro about 100,000 pages (roughly 50 million words), and Enterprise about 700,000 pages (roughly 350 million words). We assume one page is about 500 words.
+Q: Where is everything hosted?
+A: On n8n Cloud or on your own infrastructure. Through our partner Sovrinn we can also provide managed data centre hosting and monitoring.
+Q: What if a workflow breaks?
+A: Every workflow has error handling, retries and failure alerts. When something does break, such as a third-party API changing, we fix it within the response time of your plan.

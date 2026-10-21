@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "knowledge": "node scripts/build-knowledge.mjs",
+    "predev": "node scripts/build-knowledge.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/build-knowledge.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

@@ -171,6 +171,48 @@
 .testimonial figcaption b { display: block; color: var(--text); font-weight: 500; }
 .testimonial figcaption em { margin-left: auto; }
 
+/* Support: honeypot, reply card, widget */
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.spinner--light { border-color: rgba(255, 255, 255, 0.35); border-top-color: #fff; width: 15px; height: 15px; }
+.btn:disabled { opacity: 0.85; cursor: progress; transform: none; }
+.cform__error { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; padding: 10px 12px; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #a51d1d; font-size: 13.5px; }
+
+.sreply { display: flex; flex-direction: column; gap: 14px; padding: 30px; border-radius: var(--r-lg); background: var(--grey); animation: rise 0.45s cubic-bezier(.2, .7, .2, 1) both; }
+.sreply__head { display: flex; align-items: center; gap: 12px; }
+.sreply__head b { display: block; font-weight: 500; font-size: 18px; letter-spacing: -0.02em; }
+.sreply__icon { width: 40px; height: 40px; flex: none; border-radius: 12px; display: grid; place-items: center; background: var(--grad); color: #fff; }
+.sreply--human .sreply__icon { background: var(--ok); }
+.sreply__msg { margin: 0; padding: 16px 18px; border-radius: 14px; background: #fff; white-space: pre-line; font-size: 15.5px; line-height: 1.55; }
+.sreply__foot { margin: 0; font-size: 13.5px; color: var(--muted); }
+.sreply .btn { align-self: flex-start; }
+.sreply--compact { padding: 0; background: none; animation-duration: 0.3s; }
+.sreply--compact .sreply__msg { max-height: 260px; overflow: auto; background: var(--grey); font-size: 14.5px; }
+
+.supchip { border: 0; cursor: pointer; }
+.supchip.is-open { background: var(--dark-3); }
+.swidget {
+  position: fixed; left: 16px; bottom: 76px; z-index: 61; width: min(380px, calc(100vw - 32px)); max-height: calc(100vh - 110px);
+  display: flex; flex-direction: column; border-radius: 20px; overflow: hidden; background: #fff;
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  animation: widgetin 0.3s cubic-bezier(.2, .8, .2, 1) both; transform-origin: bottom left;
+}
+@keyframes widgetin { from { opacity: 0; transform: translateY(12px) scale(0.96); } }
+.swidget__head { display: flex; align-items: center; gap: 10px; padding: 14px 14px 14px 16px; background: var(--dark); color: #fff; }
+.swidget__head b { display: block; font-weight: 500; font-size: 15px; }
+.swidget__head small { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--dark-muted); }
+.swidget__logo img { display: block; border-radius: 8px; }
+.swidget__close { margin-left: auto; border: 0; width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: var(--dark-3); color: #fff; }
+.swidget__body { padding: 16px; overflow: auto; }
+.swidget__form { display: grid; gap: 10px; }
+.swidget__hello { margin: 0 0 4px; padding: 12px 14px; border-radius: 14px 14px 14px 4px; background: var(--grey); font-size: 14px; }
+.swidget__form input, .swidget__form textarea { width: 100%; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--line); background: #fff; resize: vertical; font-size: 14.5px; }
+.swidget__form :is(input, textarea):focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(234, 75, 113, 0.15); }
+
+@media (max-width: 640px) {
+  .swidget { left: 8px; right: 8px; width: auto; bottom: 70px; }
+  .sreply { padding: 22px; }
+}
+
 /* AI agent plans */
 .aitiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch; }
 .aitier { display: flex; flex-direction: column; padding: 30px; border-radius: var(--r-lg); background: var(--grey); }
