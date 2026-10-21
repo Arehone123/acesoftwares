@@ -6,6 +6,8 @@ import { CtaBand, Mono, RoiCalculator, SectionHead, WorkflowCard } from '../comp
 import { categories, workflows, workflowBySlug } from '../data/workflows.js'
 import { appById } from '../data/apps.js'
 import { FEE_SHARE } from '../data/site.js'
+import { Video, WorkflowEmbed } from '../components/Media.jsx'
+import { videoFor } from '../data/videos.js'
 
 const stack = ['Google Sheets', 'OpenAI', 'WhatsApp', 'Gmail', 'Outlook', 'Sage', 'Xero', 'Microsoft Teams', 'Slack', 'PostgreSQL', 'Jira', 'HubSpot', 'Google Drive', 'SharePoint', 'Anthropic Claude', 'Twilio SMS']
 
@@ -143,9 +145,7 @@ export function WorkflowDetail() {
               <Link to="/contact" state={{ message: `Customise: ${w.title}` }} className="btn btn--grey">CUSTOMISE WITH US</Link>
             </div>
           </div>
-          <div className="wfd__canvas dots-light">
-            <Flow columns={w.flow} theme="light" />
-          </div>
+          <WorkflowEmbed name={w.title} columns={w.flow} />
         </div>
         <div className="container wfd__body">
           <aside className="wfd__meta">
@@ -166,6 +166,8 @@ export function WorkflowDetail() {
             <div className="stackchips stackchips--left">
               {w.tools.map((t) => <Link key={t} to={`/workflows?q=${encodeURIComponent(t)}`} className="stackchip"><Mono name={t} /> {t.toUpperCase()}</Link>)}
             </div>
+            <h3>Watch</h3>
+            <Video v={videoFor[w.cat]} />
             <h3>What would it save you?</h3>
             <RoiCalculator initialHours={Math.max(1, Math.round(w.hours / 3))} />
           </div>

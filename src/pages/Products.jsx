@@ -5,6 +5,8 @@ import { BrowserMock, CtaBand, SectionHead, WorkflowCard } from '../components/B
 import { apps, appById } from '../data/apps.js'
 import { workflows } from '../data/workflows.js'
 import { RETAINER_RATE } from '../data/site.js'
+import { Video } from '../components/Media.jsx'
+import { videoFor } from '../data/videos.js'
 
 export function ProductsIndex() {
   return (
@@ -89,6 +91,17 @@ export function Product() {
               <div className="panel__canvas dots-dark"><Flow columns={app.flow} /></div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container split">
+          <div className="split__copy">
+            <span className="tag">WATCH</span>
+            <h2>See what n8n does for teams like yours</h2>
+            <p className="muted">{app.name} is built on n8n. This video from n8n’s channel shows the kind of work it takes off people’s plates.</p>
+          </div>
+          <Video v={videoFor[app.id]} big />
         </div>
       </section>
 

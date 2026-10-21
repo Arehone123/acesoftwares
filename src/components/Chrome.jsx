@@ -67,6 +67,7 @@ export function Nav() {
           ))}
           <NavLink to="/workflows" className="nav__link">WORKFLOWS</NavLink>
           <NavLink to="/integrations" className="nav__link">INTEGRATIONS</NavLink>
+          <NavLink to="/stories" className="nav__link">STORIES</NavLink>
           <NavLink to="/pricing" className="nav__link">PRICING</NavLink>
           <NavLink to="/events" className="nav__link">EVENTS <span className="nav__free">FREE</span></NavLink>
           <Link to="/contact" className="btn btn--accent nav__mobile-cta">BOOK AN AUDIT</Link>
@@ -118,6 +119,7 @@ export function Footer() {
           <div>
             <h5>COMPANY</h5>
             <Link to="/pricing">PRICING</Link>
+            <Link to="/stories">CUSTOMER STORIES</Link>
             <Link to="/events">FREE WORKSHOPS</Link>
             <Link to="/events#training">CORPORATE TRAINING</Link>
             <Link to="/contact">CONTACT</Link>

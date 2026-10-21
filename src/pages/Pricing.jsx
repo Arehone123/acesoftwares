@@ -5,6 +5,7 @@ import { CtaBand, Faq, RoiCalculator, SectionHead, Tiers } from '../components/B
 import { faqs, offers, FEE_SHARE, RETAINER_RATE } from '../data/site.js'
 import { Tilt } from '../components/Motion.jsx'
 import { offerPrice } from './Events.jsx'
+import { PaybackChart, SavingsTicker, VideoGrid } from '../components/Media.jsx'
 
 const steps = [
   ['search', 'Free audit', 'We map the manual process with you and time how long it takes each week.'],
@@ -91,6 +92,18 @@ export default function Pricing() {
           </div>
         </div>
       </section>
+
+      <section className="section section--flush">
+        <div className="container money">
+          <SavingsTicker />
+          <div className="money__chart">
+            <h3>Payback over 12 months</h3>
+            <PaybackChart />
+          </div>
+        </div>
+      </section>
+
+      <VideoGrid ids={['peopleOps750', 'saved250k']} title="What automation is worth" sub="Two real ROI stories from n8n’s official channel." />
 
       <section className="section section--grey">
         <div className="container">

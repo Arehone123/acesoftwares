@@ -1,5 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Icon from './Icon.jsx'
+import { BrandLogo } from './Blocks.jsx'
+import { brandForStep } from '../data/logos.js'
 
 const S = 72 // square node size
 const AGENT_W = 210
@@ -26,6 +28,7 @@ function layout(columns, { tools, plus }) {
       const cy = midY + (ri - (col.length - 1) / 2) * ROW_H
       nodes.push({
         id: `${ci}-${ri}`, col: ci, label, icon, sub, agent,
+        brand: icon === 'bot' || icon === 'if' ? null : brandForStep(sub, label),
         trigger: ci === 0,
         x: x + (colW - w) / 2, y: cy - S / 2, w, h: S,
       })
@@ -137,7 +140,7 @@ export default function Flow({ columns, theme = 'dark', tools = false, plus = tr
             >
               <span className="flow__port flow__port--in" />
               <span className="flow__port flow__port--out" />
-              <Icon name={n.icon} size={n.agent ? 24 : 28} />
+              {n.brand ? <span className="flow__brand"><BrandLogo name={n.brand} size={30} /></span> : <Icon name={n.icon} size={n.agent ? 24 : 28} />}
               {n.agent && <span className="flow__agent-label">{n.label}<small>{n.sub}</small></span>}
               {done && <span className="flow__check"><Icon name="check" size={11} strokeWidth={3} /></span>}
               {!n.agent && (
@@ -165,12 +168,12 @@ export default function Flow({ columns, theme = 'dark', tools = false, plus = tr
             role="dialog"
           >
             <div className="flow__pop-head">
-              <Icon name={openNode.icon} size={16} />
+              {openNode.brand ? <BrandLogo name={openNode.brand} size={16} /> : <Icon name={openNode.icon} size={16} />}
               <b>{openNode.label}</b>
               <button type="button" onClick={() => setOpen(null)} aria-label="Close"><Icon name="x" size={14} /></button>
             </div>
             <dl>
-              <dt>Node</dt><dd>{openNode.sub}</dd>
+              <dt>Node</dt><dd>{openNode.brand || openNode.sub}</dd>
               <dt>Step</dt><dd>{openNode.col + 1} of {cols}</dd>
               <dt>Status</dt><dd className="ok">{step >= openNode.col ? 'Succeeded' : 'Waiting'}</dd>
             </dl>

@@ -2,15 +2,32 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import { integrationByName, monogram } from '../data/integrations.js'
+import { CORE_ICONS, LOGO_FILES, SIMPLE_ICONS, hasLogo } from '../data/logos.js'
 import { appById } from '../data/apps.js'
 import { tiers, RETAINER_RATE, FEE_SHARE, formatR } from '../data/site.js'
 
-/** Small square tile with a coloured monogram for a third-party tool. */
+/** The official logo for a tool (Simple Icons or a file in /public/logos), or null. */
+export function BrandLogo({ name, size = 20 }) {
+  if (LOGO_FILES[name]) return <img src={LOGO_FILES[name]} alt="" width={size} height={size} style={{ objectFit: 'contain' }} />
+  const si = SIMPLE_ICONS[name]
+  if (!si) return null
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+      <path d={si.path} fill={`#${si.hex}`} />
+    </svg>
+  )
+}
+
+const LOGO_PX = { sm: 15, lg: 26, xl: 34 }
+
+/** Square tile for a third-party tool: its official logo, a core-node icon, or a coloured monogram as a fallback. */
 export function Mono({ name, size = 'sm' }) {
   const i = integrationByName(name)
+  const logo = hasLogo(name)
+  const core = CORE_ICONS[name]
   return (
-    <span className={`mono mono--${size}`} style={{ '--c': i?.color || '#555' }} title={name}>
-      {monogram(name)}
+    <span className={`mono mono--${size} ${logo ? 'mono--logo' : ''}`} style={{ '--c': i?.color || '#555' }} title={name}>
+      {logo ? <BrandLogo name={name} size={LOGO_PX[size]} /> : core ? <Icon name={core} size={LOGO_PX[size]} /> : monogram(name)}
     </span>
   )
 }

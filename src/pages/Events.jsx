@@ -3,6 +3,7 @@ import Flow from '../components/Flow.jsx'
 import Icon from '../components/Icon.jsx'
 import { CtaBand, Faq, SectionHead } from '../components/Blocks.jsx'
 import { Tilt } from '../components/Motion.jsx'
+import { VideoGrid } from '../components/Media.jsx'
 import { offers, feeLabel, TRAINING_FEE, PILOT_FEE, CONTACT_EMAILS } from '../data/site.js'
 
 const fees = { TRAINING_FEE, PILOT_FEE }
@@ -94,6 +95,8 @@ export default function Events() {
           </div>
         </div>
       </section>
+
+      <VideoGrid ids={['buildItYourself', 'whatsappAssistant', 'telegramAgent', 'agentsVsWorkflows', 'mcp', 'selfHosting']} title="Start learning before the workshop" sub="Hand-picked from n8n’s official YouTube channel." />
 
       <section className="section">
         <div className="container container--narrow">

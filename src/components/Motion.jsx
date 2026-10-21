@@ -9,7 +9,8 @@ const REVEAL = [
   '.shead', '.wfcard', '.prod', '.feat', '.tier', '.step', '.pillcard', '.partner', '.duo__card', '.inttile',
   '.metric', '.metrics__intro', '.pillar', '.faq__item', '.panel', '.split__copy', '.split__canvas', '.ctaband',
   '.bigtile', '.catcard', '.prodrow', '.offer', '.support__card', '.stat', '.split3__card', '.keep', '.roi__in',
-  '.roi__out', '.cform', '.evformat',
+  '.roi__out', '.cform', '.evformat', '.story', '.video', '.race__lane', '.ticker-box', '.money__chart', '.wembed',
+  '.testimonial', '.transform__step', '.transform__scene',
 ].join(',')
 
 /** Watches the page and animates matching elements in on scroll. Re-runs on every route change. */

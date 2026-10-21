@@ -2,13 +2,17 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Flow from '../components/Flow.jsx'
 import Icon from '../components/Icon.jsx'
-import { CtaBand, Mono, SectionHead, WorkflowCard } from '../components/Blocks.jsx'
+import { BrandLogo, CtaBand, Mono, SectionHead, WorkflowCard } from '../components/Blocks.jsx'
+import { hasLogo } from '../data/logos.js'
 import { apps } from '../data/apps.js'
 import { workflows, workflowBySlug } from '../data/workflows.js'
 import { partners, offers, RETAINER_RATE, FEE_SHARE, CONTACT_EMAILS, SUPPORT_HOURS } from '../data/site.js'
 import { integrations } from '../data/integrations.js'
 import { CountUp, Marquee, Rotator, Tilt } from '../components/Motion.jsx'
 import { offerPrice } from './Events.jsx'
+import { BeforeAfter, PaybackChart, SavingsTicker, StoryCard, Transformation, VideoGrid, WorkflowEmbed } from '../components/Media.jsx'
+import { n8nStories } from '../data/stories.js'
+import { ClientsSection } from './Stories.jsx'
 
 const heroFlow = [
   [['New enquiry', 'webhook', 'Webhook']],
@@ -138,6 +142,33 @@ export default function Home() {
           <div className="stat"><b><CountUp to={integrations.length} />+</b><span>tools we connect</span></div>
           <div className="stat"><b>{SUPPORT_HOURS}</b><span>client support</span></div>
           <div className="stat"><b><CountUp to={RETAINER_RATE} prefix="R" /></b><span>per retainer hour</span></div>
+        </div>
+      </section>
+
+      {/* HOW n8n CHANGES A BUSINESS */}
+      <section className="section">
+        <div className="container">
+          <SectionHead title={<>How n8n changes <span className="hl">a business</span></>} sub="The same team, the same work, a lot less of it done by hand." />
+          <Transformation />
+        </div>
+      </section>
+
+      {/* MONEY */}
+      <section className="section section--flush">
+        <div className="container money">
+          <SavingsTicker />
+          <div className="money__chart">
+            <h3>Cost of one process over a year</h3>
+            <PaybackChart />
+          </div>
+        </div>
+      </section>
+
+      {/* BEFORE / AFTER */}
+      <section className="section">
+        <div className="container">
+          <SectionHead title="Watch the hours disappear" sub="One month of supplier invoices: done by hand versus run through n8n." />
+          <BeforeAfter />
         </div>
       </section>
 
@@ -296,6 +327,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* COMPANIES ON n8n */}
+      <section className="section section--grey">
+        <div className="container">
+          <SectionHead title="The world’s teams already run on n8n" sub="Published n8n customer stories. These companies use n8n directly; they are not AceSoftwares clients." />
+          <div className="stories">{n8nStories.slice(0, 4).map((s) => <StoryCard key={s.company} s={s} />)}</div>
+          <p className="center"><Link to="/stories" className="ulink">See all stories</Link></p>
+        </div>
+      </section>
+
+      <ClientsSection />
+
+      {/* EMBEDDED WORKFLOW */}
+      <section className="section">
+        <div className="container split split--embed">
+          <div className="split__copy">
+            <span className="tag tag--accent">REAL n8n WORKFLOW</span>
+            <h2>Open it. Copy it. Run it.</h2>
+            <p className="muted">Every workflow on this site is a real n8n workflow. Switch to the live n8n canvas, or copy the JSON straight into your own n8n.</p>
+            <Link to="/workflows" className="ulink">Browse the workflow library</Link>
+          </div>
+          <WorkflowEmbed name="Support triage agent" columns={workflowBySlug('support-triage-agent').flow} />
+        </div>
+      </section>
+
+      <VideoGrid ids={['peopleOps750', 'saved250k', 'mercedes', 'whatsappAssistant']} title={<>Prepare to be <span className="hl">automated</span></>} sub="Real stories and builds from n8n’s official YouTube channel." />
+
       {/* TRENDING */}
       <section className="section">
         <div className="container">
@@ -313,7 +370,7 @@ export default function Home() {
             {partners.map((p) => (
               <a key={p.name} href={p.url} target="_blank" rel="noopener noreferrer" className="partner">
                 <span className="tag">{p.role.toUpperCase()}</span>
-                <h3>{p.name}</h3>
+                <h3 className="partner__name">{hasLogo(p.name) && <BrandLogo name={p.name} size={40} />}{p.name}</h3>
                 <p>{p.desc}</p>
                 <span className="mono-label">{p.url.replace(/^https?:\/\//, '').toUpperCase()} ↗</span>
               </a>

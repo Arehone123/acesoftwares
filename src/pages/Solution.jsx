@@ -2,10 +2,19 @@ import { useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import Flow from '../components/Flow.jsx'
 import Icon from '../components/Icon.jsx'
-import { CtaBand, Faq, Mono, SectionHead, WorkflowCard } from '../components/Blocks.jsx'
+import { BrandLogo, CtaBand, Faq, Mono, SectionHead, WorkflowCard } from '../components/Blocks.jsx'
 import { solutionById } from '../data/solutions.js'
 import { workflows } from '../data/workflows.js'
 import { partners } from '../data/site.js'
+import { PaybackChart, StoryCard, Video } from '../components/Media.jsx'
+import { videoFor } from '../data/videos.js'
+import { n8nStories } from '../data/stories.js'
+
+const STORY_PICKS = {
+  'it-ops': ['Delivery Hero', 'Vodafone', 'Trendyol'],
+  'finance-ops': ['Icatu Seguros', 'Seguros Bolívar', 'Huel'],
+  'mining-ops': ['Mercedes-Benz', 'StepStone', 'Delivery Hero'],
+}
 
 export default function Solution() {
   const { id } = useParams()
@@ -30,8 +39,8 @@ export default function Solution() {
         <div className="container runs-on">
           <p className="mono-label">RUNS ON</p>
           <div>
-            <span className="wordmark">n8n</span>
-            {partner && <a href={partner.url} target="_blank" rel="noopener noreferrer" className="wordmark">{partner.name} ↗</a>}
+            <span className="wordmark"><BrandLogo name="n8n" size={26} /> n8n</span>
+            {partner && <a href={partner.url} target="_blank" rel="noopener noreferrer" className="wordmark"><BrandLogo name={partner.name} size={26} /> {partner.name} ↗</a>}
             <span className="wordmark">AceSoftwares</span>
           </div>
         </div>
@@ -92,6 +101,31 @@ export default function Solution() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container split split--rev">
+          <Video v={videoFor[s.id]} big />
+          <div className="split__copy">
+            <span className="tag">WATCH</span>
+            <h2>n8n in action</h2>
+            <p className="muted">From n8n’s official channel: the kind of automation we build for {s.nav.toLowerCase()} teams.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section section--grey">
+        <div className="container">
+          <SectionHead title="Already working for others" sub="Published n8n customer stories (not AceSoftwares clients)." />
+          <div className="stories">{n8nStories.filter((x) => (STORY_PICKS[s.id] || []).includes(x.company)).map((x) => <StoryCard key={x.company} s={x} />)}</div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <SectionHead title="What it’s worth" sub="One process taking 160 staff hours a month, automated at 80%, including our fee." />
+          <PaybackChart />
         </div>
       </section>
 

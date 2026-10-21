@@ -1,0 +1,43 @@
+// Videos from n8n's official YouTube channel (https://www.youtube.com/@n8n-io), embedded with YouTube's
+// privacy-enhanced player. IDs checked October 2026 — swap any ID to change the video.
+export const videos = {
+  peopleOps750: { id: 'MMBDzJde41Q', title: 'The AI employee that saved 750 hours', tag: 'ROI' },
+  saved250k: { id: 'Mn_h3EIwIIE', title: '$250K saved in 30 days with enterprise AI training', tag: 'ROI' },
+  stepstone: { id: 'VNGXVn56AyQ', title: '700 workflows, 3,000 employees: scaling n8n at StepStone', tag: 'CASE STUDY' },
+  mercedes: { id: 'auj9ajsiI9s', title: 'How Mercedes-Benz scales AI agents with n8n', tag: 'CASE STUDY' },
+  whatsappAssistant: { id: '4wSiQA8vG78', title: 'From first workflow to WhatsApp assistant', tag: 'BEGINNER' },
+  telegramAgent: { id: 'AbqPOLfLsm8', title: 'How to build a Telegram agent in n8n', tag: 'TUTORIAL' },
+  agentsVsWorkflows: { id: 'P5x0nsY8hCg', title: 'When to use agents vs a workflow with AI', tag: 'AI' },
+  buildItYourself: { id: 'mAmTBsIwkqc', title: 'Build it yourself with n8n', tag: 'INTRO' },
+  selfHosting: { id: 't5RBVTby9EU', title: 'Self-hosting n8n locally + AI Assistant setup', tag: 'IT OPS' },
+  mcp: { id: '_7V-AseDCrc', title: 'Using n8n’s MCP: 3 live builds', tag: 'ADVANCED' },
+  assistant: { id: '2T-xz4DmacE', title: 'n8n now builds for you (n8n Assistant)', tag: 'AI' },
+  inTheLoop: { id: 'LaHJBwYA6P8', title: 'n8n In The Loop 2026: inside n8n’s next chapter', tag: 'EVENT' },
+  howWeUseDesign: { id: '2vigElqQsl0', title: 'How we use n8n: Design Lead', tag: 'STORY' },
+  howWeUseEngineer: { id: 'u2KhZJC7cXs', title: 'How we use n8n: Workflow Automation Engineer', tag: 'STORY' },
+  githubSlack: { id: 'vqEUrTicD3s', title: 'Slack messages for new GitHub stars', tag: 'QUICK BUILD' },
+  homeSecurity: { id: 'KgNXSNwvfzc', title: 'Automating home security with n8n', tag: 'QUICK BUILD' },
+}
+
+// Which video to show on each product / solution / workflow category page.
+export const videoFor = {
+  'mining-pulse': 'selfHosting',
+  'community-pulse': 'whatsappAssistant',
+  'property-os': 'whatsappAssistant',
+  'admin-os': 'assistant',
+  'hr-os': 'peopleOps750',
+  'bid-os': 'agentsVsWorkflows',
+  'hirable-ai': 'peopleOps750',
+  'finance-os': 'saved250k',
+  'it-ops': 'selfHosting',
+  'finance-ops': 'saved250k',
+  'mining-ops': 'mercedes',
+  AI: 'agentsVsWorkflows',
+  Finance: 'saved250k',
+  HR: 'peopleOps750',
+  Sales: 'whatsappAssistant',
+  'IT Ops': 'selfHosting',
+  Tenders: 'agentsVsWorkflows',
+  Operations: 'buildItYourself',
+  'Document Ops': 'assistant',
+}
