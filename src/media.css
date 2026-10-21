@@ -171,6 +171,82 @@
 .testimonial figcaption b { display: block; color: var(--text); font-weight: 500; }
 .testimonial figcaption em { margin-left: auto; }
 
+/* AI agent plans */
+.aitiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; align-items: stretch; }
+.aitier { display: flex; flex-direction: column; padding: 30px; border-radius: var(--r-lg); background: var(--grey); }
+.aitier .tag { align-self: flex-start; }
+.aitier h3 { font-size: 26px; margin-bottom: 6px; }
+.aitier__price { font-size: clamp(30px, 3vw, 40px); letter-spacing: -0.045em; line-height: 1.05; }
+.aitier__price span { font-size: 15px; letter-spacing: 0; color: var(--dim); margin-left: 4px; }
+.aitier__desc { color: var(--muted); font-size: 15px; margin: 12px 0 18px; }
+.aitier__cap { padding: 18px; border-radius: var(--r); background: var(--bg); margin-bottom: 20px; }
+.aitier__cap > div:first-child b { display: block; font-size: 32px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.aitier__cap > div:first-child span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--dim); }
+.aitier__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 12px; }
+.aitier__grid b { display: block; font-size: 22px; font-weight: 500; letter-spacing: -0.03em; }
+.aitier__meter { height: 8px; border-radius: 6px; background: var(--grey-2); overflow: hidden; }
+.aitier__meter i { display: block; height: 100%; border-radius: 6px; background: var(--grad); transform-origin: left; animation: meterin 1.4s cubic-bezier(.3, .7, .2, 1) both; }
+.aitier__meter i.is-max { background: repeating-linear-gradient(45deg, var(--accent), var(--accent) 8px, var(--violet) 8px, var(--violet) 16px); background-size: 200% 100%; animation: meterin 1.4s both, stripes 6s linear infinite; }
+@keyframes meterin { from { transform: scaleX(0); } }
+@keyframes stripes { to { background-position: -200% 0; } }
+.aitier__equiv { margin: 12px 0 0; font-size: 13.5px; color: var(--muted); }
+.aitier__equiv b { color: var(--text); font-weight: 500; }
+.aitier .ticks { flex: 1; margin-top: 8px; }
+.aitier--featured { background: var(--dark); color: var(--dark-text); }
+.aitier--featured .aitier__desc, .aitier--featured .ticks li, .aitier--featured .aitier__equiv { color: var(--dark-muted); }
+.aitier--featured .aitier__equiv b { color: #fff; }
+.aitier--featured .aitier__cap { background: var(--dark-2); }
+.aitier--featured .aitier__meter { background: var(--dark-3); }
+.aitier--featured .tag { background: var(--grad); color: #fff; }
+
+/* Capacity table */
+.captable { border-radius: var(--r-lg); overflow: hidden; background: var(--grey); }
+.captable__row { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 1.2fr; gap: 12px; align-items: center; padding: 18px 24px; border-top: 1px solid var(--line); font-size: 15px; }
+.captable__row span:first-child { display: grid; }
+.captable__row b { font-weight: 500; font-size: 18px; }
+.captable__row small { font-size: 12.5px; color: var(--dim); }
+.captable__row--head { border-top: 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--dim); background: var(--grey-2); }
+.captable__row.is-featured { background: #fff; }
+.captable__row.is-featured b { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.capnotes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
+.capnotes > div { display: flex; gap: 12px; padding: 18px; border-radius: var(--r); background: var(--grey); }
+.capnotes svg { flex: none; color: var(--accent); margin-top: 2px; }
+.capnotes p { margin: 0; font-size: 14px; color: var(--muted); }
+.capnotes b { color: var(--text); font-weight: 500; }
+
+/* Estimator */
+.aiest { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; }
+.aiest__in { display: grid; gap: 26px; align-content: start; padding: 32px; border-radius: var(--r-lg); background: var(--bg); }
+.aiest__out { display: flex; flex-direction: column; gap: 18px; padding: 32px; border-radius: var(--r-lg); background: var(--dark); color: var(--dark-text); }
+.aiest__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.aiest__stats small { color: var(--dark-muted); }
+.aiest__stats b { display: block; font-size: 24px; font-weight: 500; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.aiest__rec { display: grid; gap: 2px; padding: 18px; border-radius: var(--r); background: var(--dark-2); animation: rise 0.4s ease both; }
+.aiest__rec .mono-label { color: var(--dark-muted); }
+.aiest__rec strong { font-size: 40px; font-weight: 500; letter-spacing: -0.045em; line-height: 1.05; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.aiest__rec span:last-child { color: var(--dark-muted); }
+.aiest .btn { margin-top: auto; }
+
+@media (max-width: 1100px) {
+  .aitiers { grid-template-columns: 1fr; }
+  .capnotes { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .captable__row { grid-template-columns: 1fr 1fr; padding: 16px; }
+  .captable__row span:first-child { grid-column: 1 / -1; }
+  .captable__row--head { display: none; }
+  .captable__row span:not(:first-child)::before { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--dim); }
+  .captable__row span:nth-child(2)::before { content: 'EXECUTIONS'; }
+  .captable__row span:nth-child(3)::before { content: 'PAGES / MONTH'; }
+  .captable__row span:nth-child(4)::before { content: 'WORDS / MONTH'; }
+  .captable__row span:nth-child(5)::before { content: 'BY HAND'; }
+  .capnotes, .aiest { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .aitier, .aiest__in, .aiest__out { padding: 22px; }
+  .aiest__stats b { font-size: 19px; }
+}
+
 @media (max-width: 1100px) {
   .stories { grid-template-columns: repeat(2, 1fr); }
   .money, .transform, .split--embed { grid-template-columns: 1fr; }

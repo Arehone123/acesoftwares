@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { CONTACT_EMAILS, SUPPORT_HOURS, tiers } from '../data/site.js'
 
-const interests = ['Not sure yet — audit me', ...tiers.map((t) => `Apps — ${t.name}`), 'Workflows — pay per hour saved', 'Free n8n workshop', 'Corporate training', 'Pilot implementation']
+const interests = ['Not sure yet — audit me', ...tiers.map((t) => `Apps — ${t.name}`), 'Workflows — pay per hour saved', 'AI agents — Starter', 'AI agents — Pro', 'AI agents — Enterprise', 'Free n8n workshop', 'Corporate training', 'Pilot implementation']
 
 export function Contact() {
   const { state } = useLocation()

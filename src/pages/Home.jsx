@@ -13,6 +13,7 @@ import { offerPrice } from './Events.jsx'
 import { BeforeAfter, PaybackChart, SavingsTicker, StoryCard, Transformation, VideoGrid, WorkflowEmbed } from '../components/Media.jsx'
 import { n8nStories } from '../data/stories.js'
 import { ClientsSection } from './Stories.jsx'
+import { AiTiers } from '../components/Ai.jsx'
 
 const heroFlow = [
   [['New enquiry', 'webhook', 'Webhook']],
@@ -305,6 +306,18 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* AI AGENTS */}
+      <section className="section">
+        <div className="container">
+          <SectionHead
+            title={<>We build <span className="hl">AI agents</span> too</>}
+            sub="Agents that read documents, answer customers and take action in your systems, running on our managed AI models for one fixed monthly price."
+          />
+          <AiTiers />
+          <p className="center"><Link to="/ai-agents" className="ulink">How many pages and words each plan covers</Link></p>
         </div>
       </section>
 

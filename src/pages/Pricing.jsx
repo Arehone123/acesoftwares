@@ -5,6 +5,7 @@ import { CtaBand, Faq, RoiCalculator, SectionHead, Tiers } from '../components/B
 import { faqs, offers, FEE_SHARE, RETAINER_RATE } from '../data/site.js'
 import { Tilt } from '../components/Motion.jsx'
 import { offerPrice } from './Events.jsx'
+import { AiTiers } from '../components/Ai.jsx'
 import { PaybackChart, SavingsTicker, VideoGrid } from '../components/Media.jsx'
 
 const steps = [
@@ -16,7 +17,7 @@ const steps = [
 
 const split = [
   ['You pay us', [`Product retainer at R${RETAINER_RATE}/hour`, `Workflow fees: ${Math.round(FEE_SHARE * 100)}% of the value of hours saved`, 'Custom builds, if scoped separately']],
-  ['You pay providers directly', ['n8n Cloud or your own server', 'AI API usage (OpenAI, Anthropic)', 'WhatsApp Business, Twilio and other SaaS']],
+  ['You pay providers directly', ['n8n Cloud or your own server', 'AI usage with your own keys, at cost (or one of our managed AI plans)', 'WhatsApp Business, Twilio and other SaaS']],
   ['Always included', ['24/7 customer support', 'Free discovery audit', 'Documentation & handover', 'Failure alerts, retries and monitoring']],
 ]
 
@@ -77,6 +78,14 @@ export default function Pricing() {
 
       <section className="section section--flush">
         <div className="container">
+          <SectionHead title={<>AI agent <span className="hl">plans</span></>} sub="Your agents on our managed AI models: a fixed monthly allowance instead of variable token bills." />
+          <AiTiers />
+          <p className="center"><Link to="/ai-agents" className="ulink">See pages and words per plan, and estimate your volume</Link></p>
+        </div>
+      </section>
+
+      <section className="section section--flush">
+        <div className="container">
           <SectionHead title="Training, workshops & pilots" sub="Start learning for free, train your whole team, or prove the value with a pilot." />
           <div className="offers">
             {offers.map((o) => (
@@ -107,7 +116,7 @@ export default function Pricing() {
 
       <section className="section section--grey">
         <div className="container">
-          <SectionHead title="Who pays for what" sub="No hidden margins on software or AI usage." />
+          <SectionHead title="Who pays for what" sub="No hidden costs: use your own accounts at cost, or a fixed monthly AI plan from us." />
           <div className="split3">
             {split.map(([title, items]) => (
               <div key={title} className="split3__card">

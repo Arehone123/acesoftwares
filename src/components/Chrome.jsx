@@ -19,6 +19,7 @@ const menus = {
   SOLUTIONS: [
     ...solutions.map((s) => ({ to: `/solutions/${s.id}`, icon: s.id === 'it-ops' ? 'server' : s.id === 'finance-ops' ? 'wallet' : 'pickaxe', title: s.nav, text: s.title })),
     { to: '/workflows', icon: 'workflow', title: 'Workflow library', text: 'Ready-to-deploy automations' },
+    { to: '/ai-agents', icon: 'bot', title: 'AI agents', text: 'Agents on our managed AI, fixed monthly plans' },
     { to: '/integrations', icon: 'zap', title: 'Integrations', text: 'Tools we connect to' },
     { to: '/events', icon: 'users', title: 'Events & training', text: 'Free n8n workshops, corporate training, pilots' },
   ],
@@ -61,6 +62,7 @@ export function Nav() {
           ))}
           <NavLink to="/workflows" className="nav__link">WORKFLOWS</NavLink>
           <NavLink to="/integrations" className="nav__link">INTEGRATIONS</NavLink>
+          <NavLink to="/ai-agents" className="nav__link">AI AGENTS</NavLink>
           <NavLink to="/stories" className="nav__link">STORIES</NavLink>
           <NavLink to="/pricing" className="nav__link">PRICING</NavLink>
           <NavLink to="/events" className="nav__link">EVENTS <span className="nav__free">FREE</span></NavLink>
@@ -113,6 +115,7 @@ export function Footer() {
           <div>
             <h5>COMPANY</h5>
             <Link to="/pricing">PRICING</Link>
+            <Link to="/ai-agents">AI AGENTS</Link>
             <Link to="/stories">CUSTOMER STORIES</Link>
             <Link to="/events">FREE WORKSHOPS</Link>
             <Link to="/events#training">CORPORATE TRAINING</Link>
