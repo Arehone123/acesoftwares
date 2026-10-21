@@ -1,47 +1,51 @@
 # Website support workflow (n8n)
 
-`acesoftwares-support.workflow.json` answers every support request from the website: the contact page and the
-24/7 support widget on every page. The site posts to:
+`acesoftwares-support.workflow.json` handles every support request from the website (contact page and the
+24/7 widget on every page). It is your ticket-based workflow with the fixes listed below.
 
-```
-https://arehonematodzi.app.n8n.cloud/webhook/acesoftwares-support
-```
-
-(set as `SUPPORT_WEBHOOK` in `src/data/site.js`).
-
-## What it does
-
-1. **Webhook** receives `name`, `email`, `company`, `interest`, `message`, `source`, `page` (form data).
-2. **Loads `https://acesoftwares.tech/knowledge.txt`**, a plain-text summary of the site that is regenerated on
-   every `npm run build` from `src/data/*.js`, so prices, plans and FAQs are always current.
-3. **AI agent** (your Azure OpenAI model) answers from that knowledge only, or replies `NEEDS_HUMAN_AGENT`.
-4. **Replies to the website instantly**: `{ status: 'success', message }` or `{ status: 'transferred', message }`.
-5. **Emails (Gmail)**
-   - Needs a person → alert to info@acetheacademia.com + n8ncapetown@gmail.com, and a confirmation to the customer.
-   - Answered by AI → the answer to the customer, and a copy to the team so every lead is seen.
-
-## Import it (replaces the current version)
-
-1. In n8n, open the existing workflow and **deactivate** it (the new one uses the same webhook path).
-2. **Workflows → Import from file** → choose `acesoftwares-support.workflow.json`.
-3. Open each of the 4 **Gmail** nodes and select your Gmail credential (e.g. the n8ncapetown@gmail.com account).
-4. Check the **Azure OpenAI Chat Model** node still shows your credential (`Azure Open AI account 6`).
-5. **Activate** the workflow. Delete or archive the old one.
-
-## Fixes compared with the original
-
-| Problem in the original | Fix |
+| Webhook | Used by |
 |---|---|
-| Webhook responded immediately, so the Respond nodes never reached the site | `responseMode: responseNode` |
-| AI Agent had no prompt (expects `chatInput` from a chat trigger) | Prompt defined from the visitor's message + system instructions |
-| Simple Memory had no session key without a chat trigger | Session key = visitor's email |
-| Code node used `$input.item` in "run once for all items" mode | Mode set to "run once for each item" |
-| Scraping the React homepage returns an empty HTML shell | Loads `/knowledge.txt` instead (and still works if it can't be reached) |
-| AI answer was inserted into hand-written JSON (quotes/new lines broke it) | Response built as a real JSON object |
-| No emails were sent | 4 Gmail nodes (team alerts + customer emails) |
+| `POST https://arehonematodzi.app.n8n.cloud/webhook/acesoftwares-support` | Contact form + widget (`SUPPORT_WEBHOOK`) |
+| `GET https://arehonematodzi.app.n8n.cloud/webhook/acesoftwares-ticket-status?id=AS-…` | Site checks for your team's reply (`SUPPORT_STATUS_WEBHOOK`) |
 
-## Notes
+Always use **`/webhook/`** (production). `/webhook-test/` only works once, while "Listen for test event" is open.
 
-- `knowledge.txt` only exists once the site is deployed at acesoftwares.tech. Until then the agent has no context and
-  will mostly hand over to a person, which is safe.
-- The webhook is public. The site has a hidden spam trap, but if you see abuse, add a rate limit or a shared secret.
+## How it works
+
+1. A visitor asks a question. The workflow loads `https://acesoftwares.tech/knowledge.txt` (generated from the site on
+   every build) and the AI agent answers from it.
+2. **AI can answer** → the answer shows on the website instantly, and is emailed to the visitor (they can untick
+   "Email me a copy").
+3. **Needs a person** → a ticket is created. The visitor sees "a support agent is on it" and gets an acknowledgement
+   email; **n8ncapetown@gmail.com** gets the request with an AI summary and a suggested draft.
+4. **You reply to that email** from n8ncapetown@gmail.com (or reply `APPROVE` to send the draft). Within a minute the
+   answer is emailed to the customer **and appears in the widget / contact page** if they still have the site open.
+
+## Fixes in this version
+
+| Problem | Fix |
+|---|---|
+| `allowedOrigins` was only `https://acesoftwares.tech` | Also allows `www.acesoftwares.tech` and `localhost:5173` |
+| Alerts went to `owner@acesoftwares.tech` (and the reply trigger watched it) | Uses `n8ncapetown@gmail.com`, a different mailbox from the sending Gmail account, so replies land in the inbox the trigger watches |
+| Scraped the React homepage (empty HTML shell) | Loads `/knowledge.txt` |
+| Customer text was put into HTML emails unescaped | Escaped before it goes into any email |
+| Website never sent `email_copy` or checked ticket status | Website now sends `email_copy` and checks the status webhook |
+
+## If every request returns HTTP 500
+
+Every path, including the simple ticket-status webhook that has no AI in it, failing within 0.3 s means n8n cannot
+start the run. Open **Executions** in n8n, click the failed run, and read the error on the red node. Common causes:
+
+- **Code node error.** Open a Code node and click *Test step*; check the n8n Cloud status page for task-runner issues.
+- **Execution limit.** Check **Settings → Usage** in n8n Cloud; when the monthly quota is used up, runs stop.
+- **Workflow not published.** After importing, click **Publish / Activate** so production uses the new version.
+
+## Import
+
+1. Deactivate the current workflow. 2. **Import from file** → this JSON. 3. Check the Gmail nodes and the Gmail
+Trigger use the `acetheacademia.info` credential and the Azure node uses `Azure Open AI account 6`.
+4. **Activate.** 5. Send a test from the site's widget.
+
+Note: tickets live in the workflow's static data, which n8n only saves for **production** runs (not manual test runs),
+and two requests finishing at the same moment can overwrite each other. For high volume, move tickets to a Google
+Sheet or database.

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { CONTACT_EMAILS, SUPPORT_HOURS, tiers } from '../data/site.js'
 import { mailtoFallback, sendSupportRequest } from '../lib/support.js'
-import { SupportReply } from '../components/Support.jsx'
+import { EmailCopyToggle, SupportReply } from '../components/Support.jsx'
 
 const interests = ['Not sure yet — audit me', ...tiers.map((t) => `Apps — ${t.name}`), 'Workflows — pay per hour saved', 'AI agents — Starter', 'AI agents — Pro', 'AI agents — Enterprise', 'Free n8n workshop', 'Corporate training', 'Pilot implementation']
 
@@ -17,6 +17,7 @@ export function Contact() {
     message: state?.message || '',
   })
   const [trap, setTrap] = useState('') // honeypot: real visitors never see or fill this
+  const [emailCopy, setEmailCopy] = useState(true)
   const [state_, setState] = useState({ phase: 'idle' }) // idle | sending | done | error
   const up = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
@@ -25,7 +26,7 @@ export function Contact() {
     e.preventDefault()
     if (trap) return setState({ phase: 'done', status: 'success', message: 'Thanks, we’ve received your message.' })
     setState({ phase: 'sending' })
-    const res = await sendSupportRequest({ ...form, source: 'contact-page' })
+    const res = await sendSupportRequest({ ...form, emailCopy, source: 'contact-page' })
     setState(res.ok ? { phase: 'done', ...res } : { phase: 'error', ...res })
   }
 
@@ -55,6 +56,7 @@ export function Contact() {
         {state_.phase === 'done' ? (
           <SupportReply
             status={state_.status}
+            ticketId={state_.ticketId}
             message={state_.message}
             onReset={() => { setState({ phase: 'idle' }); setForm({ ...form, message: '' }) }}
           />
@@ -70,6 +72,7 @@ export function Contact() {
             <select value={form.interest} onChange={up('interest')}>{interests.map((i) => <option key={i}>{i}</option>)}</select>
           </label>
           <label><span>WHAT PROCESS TAKES THE MOST TIME? (OR ASK US ANYTHING)</span><textarea required rows={5} value={form.message} onChange={up('message')} /></label>
+          <EmailCopyToggle checked={emailCopy} onChange={setEmailCopy} />
           <button type="submit" className="btn btn--accent btn--block" disabled={state_.phase === 'sending'}>
             {state_.phase === 'sending' ? <><span className="spinner spinner--light" /> SENDING…</> : 'BOOK MY FREE AUDIT'}
           </button>

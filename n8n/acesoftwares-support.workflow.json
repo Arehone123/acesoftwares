@@ -1,5 +1,4 @@
 {
-  "name": "AceSoftwares — Website support (contact form + 24/7 widget)",
   "nodes": [
     {
       "parameters": {
@@ -10,12 +9,15 @@
           "allowedOrigins": "https://acesoftwares.tech,https://www.acesoftwares.tech,http://localhost:5173"
         }
       },
-      "id": "68dc2285-0ebb-41f9-b1c4-1b0d8d0b302b",
+      "id": "2166c863-d844-4046-93a4-66d9b56e73e0",
       "name": "Webhook: Contact Form",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [-448, 32],
-      "webhookId": "595328c6-8bb0-437d-8f59-86054d17f4c0"
+      "position": [
+        -560,
+        144
+      ],
+      "webhookId": "a4c9c093-a431-4f14-9202-84c671c2cfcb"
     },
     {
       "parameters": {
@@ -23,56 +25,66 @@
         "options": {
           "response": {
             "response": {
-              "fullResponse": true,
               "responseFormat": "text"
             }
           },
-          "timeout": 10000
+          "timeout": 15000
         }
       },
-      "id": "38efc00d-b8d3-48a1-b501-bd795a25669e",
+      "id": "de32309f-aad0-498a-a58a-3200d9e3b592",
       "name": "HTTP Request: Load Knowledge Base",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [-224, 32],
-      "alwaysOutputData": true,
+      "position": [
+        -336,
+        144
+      ],
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "// Form fields sent by the website (contact page + 24/7 widget)\nconst form = $('Webhook: Contact Form').item.json.body || {};\n\n// Knowledge base text (plain text from /knowledge.txt; strip HTML just in case a page was fetched instead)\nlet raw = $input.item.json.body ?? $input.item.json.data ?? '';\nif (typeof raw !== 'string') raw = JSON.stringify(raw);\nconst knowledge = raw.trim().startsWith('<')\n  ? raw.replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n       .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n       .replace(/<[^>]+>/g, ' ')\n       .replace(/\\s+/g, ' ')\n  : raw;\n\nreturn {\n  json: {\n    user_name: form.name || 'there',\n    user_email: form.work_email || form.email || '',\n    user_company: form.company || '',\n    user_interest: form.interest || '',\n    user_message: form.process_takes_most_time || form.message || '',\n    source: form.source || 'website',\n    page: form.page || '',\n    submitted_at: form.submitted_at || $now.toISO(),\n    website_context: knowledge.substring(0, 20000)\n  }\n};"
+        "jsCode": "// Clean scraped website text, normalise form fields, create a ticket ID\nconst body = $('Webhook: Contact Form').item.json.body || {};\nconst raw = $input.item.json.data ?? $input.item.json.body ?? '';\nconst html = typeof raw === 'string' ? raw : JSON.stringify(raw);\n\nconst cleanText = html\n  .replace(/<script[\\s\\S]*?>[\\s\\S]*?<\\/script>/gi, '')\n  .replace(/<style[\\s\\S]*?>[\\s\\S]*?<\\/style>/gi, '')\n  .replace(/<[^>]+>/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\nconst esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\n\nconst email = String(body.work_email || body.email || '').trim();\nconst message = String(body.process_takes_most_time || body.message || '').trim();\nconst wantsCopy = [true, 'true', 'on', 'yes', '1', 1].includes(body.email_copy);\n\nconst ticketId = 'AS-' + Date.now().toString(36).toUpperCase()\n  + Math.random().toString(36).slice(2, 8).toUpperCase();\n\nreturn {\n  json: {\n    ticket_id: ticketId,\n    user_name: String(body.name || '').trim() || 'Valued Client',\n    user_email: email,\n    has_valid_email: /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email),\n    user_message: message || '(no message provided)',\n    wants_email_copy: wantsCopy,\n    user_message_html: esc(message || '(no message provided)').replace(/\\n/g, '<br>'),\n    user_name_html: esc(String(body.name || '').trim() || 'Valued Client'),\n    website_context: cleanText.substring(0, 20000)\n  }\n};"
       },
-      "id": "d6196cc5-5196-4cee-8d45-cebc654e8947",
-      "name": "Code: Clean Text & Format Inputs",
+      "id": "c5c1e0f6-d33f-4c70-b801-9bd84740069c",
+      "name": "Code: Clean Inputs & Create Ticket",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [0, 32]
+      "position": [
+        -128,
+        144
+      ]
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Name: {{ $json.user_name }}\nCompany: {{ $json.user_company }}\nInterested in: {{ $json.user_interest }}\n\nMessage:\n{{ $json.user_message }}",
+        "text": "=Customer name: {{ $json.user_name }}\nCustomer email: {{ $json.user_email || 'not provided' }}\n\nCustomer message:\n{{ $json.user_message }}\n\nWEBSITE CONTEXT:\n{{ $json.website_context }}",
         "options": {
-          "systemMessage": "=You are the friendly 24/7 support assistant for AceSoftwares, an automation agency that builds business operating systems, n8n workflows and AI agents in South Africa.\n\nAnswer the visitor's message using ONLY the knowledge base below. Be warm, clear and concise (under 150 words). Use Rands. Do not invent prices, dates, clients or promises that are not in the knowledge base.\n\nReply with exactly NEEDS_HUMAN_AGENT and nothing else when ANY of these apply:\n- the answer is not in the knowledge base;\n- they want a quote, a demo, a meeting, an audit booking or to start a project;\n- it is about an existing account, invoice, outage or broken workflow;\n- they are upset, or ask to speak to a person.\n\nKNOWLEDGE BASE:\n{{ $json.website_context }}"
+          "systemMessage": "You are the friendly support assistant for AceSoftwares (acesoftwares.tech), a company that builds software and automations for businesses.\n\nRules:\n1. Answer ONLY using facts found in the WEBSITE CONTEXT provided with each request. Never invent prices, timelines, guarantees, features or contact details.\n2. If the answer is clearly supported by the context, reply in 2-6 short, warm sentences of plain text (no markdown, no headings). Address the customer by first name.\n3. Escalate to a human if ANY of these are true: the answer is not in the context; the customer asks for a quote, pricing for their specific case, a call/meeting, a custom project scope, account- or invoice-specific help; they complain or are upset; or they ask for a human.\n4. When escalating, respond in EXACTLY this format and nothing else:\nNEEDS_HUMAN_AGENT\nSUMMARY: <one sentence describing what the customer needs>\nDRAFT: <your best suggested reply that a human could approve or edit, written to the customer>"
         }
       },
-      "id": "5d8bc34f-22b5-430f-9942-9d71cecd5cd1",
+      "id": "19ac70b9-177e-42b1-b416-0df9a7223981",
       "name": "AI Agent: Answer Support Query",
       "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 1.7,
-      "position": [176, 32]
+      "typeVersion": 1.6,
+      "position": [
+        112,
+        144
+      ]
     },
     {
       "parameters": {
         "model": "gpt-5.3-chat",
         "options": {}
       },
-      "id": "d39efc7d-e27f-4b3a-a6c1-7b7072ecb92b",
+      "id": "f52dc5e9-14eb-4b45-925f-9829b5f9e39b",
       "name": "Azure OpenAI Chat Model3",
       "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
       "typeVersion": 1,
-      "position": [144, 272],
+      "position": [
+        64,
+        384
+      ],
       "credentials": {
         "azureOpenAiApi": {
           "id": "XIxflOEm9ldhWaF0",
@@ -83,14 +95,17 @@
     {
       "parameters": {
         "sessionIdType": "customKey",
-        "sessionKey": "={{ $('Code: Clean Text & Format Inputs').item.json.user_email || 'anonymous' }}",
-        "contextWindowLength": 6
+        "sessionKey": "={{ $('Code: Clean Inputs & Create Ticket').item.json.user_email || $('Code: Clean Inputs & Create Ticket').item.json.ticket_id }}",
+        "contextWindowLength": 10
       },
-      "id": "7690b03d-3a79-448f-9caf-940adad78b1b",
+      "id": "195e897a-8d92-45b9-aa2d-55eb86885404",
       "name": "Simple Memory",
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
-      "position": [288, 272]
+      "typeVersion": 1.4,
+      "position": [
+        208,
+        384
+      ]
     },
     {
       "parameters": {
@@ -98,12 +113,12 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "loose",
+            "typeValidation": "strict",
             "version": 1
           },
           "conditions": [
             {
-              "id": "check-fallback",
+              "id": "ef877b91-806b-4cd1-995a-3c56e633d377",
               "leftValue": "={{ $json.output }}",
               "rightValue": "NEEDS_HUMAN_AGENT",
               "operator": {
@@ -116,152 +131,546 @@
         },
         "options": {}
       },
-      "id": "7235255c-7d9c-4e15-91e2-6b719f24d940",
-      "name": "If: Needs a Person?",
+      "id": "889a9892-4073-4e4d-90e6-8a865570f5a7",
+      "name": "If: Needs Human?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
-      "position": [448, 32]
+      "position": [
+        400,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Parse the agent's escalation output and store the ticket\nconst t = $('Code: Clean Inputs & Create Ticket').item.json;\nconst out = String($input.item.json.output || '');\n\nconst summary = (out.match(/SUMMARY:\\s*([\\s\\S]*?)(?=\\n\\s*DRAFT:|$)/i) || [])[1]?.trim()\n  || 'Customer needs a human reply.';\nconst draft = (out.match(/DRAFT:\\s*([\\s\\S]*)$/i) || [])[1]?.trim() || '';\n\nconst store = $getWorkflowStaticData('global');\nstore.tickets = store.tickets || {};\n\n// Prune tickets older than 30 days\nconst now = Date.now();\nfor (const [id, tk] of Object.entries(store.tickets)) {\n  if (now - (tk.created_at || 0) > 30 * 864e5) delete store.tickets[id];\n}\n\nstore.tickets[t.ticket_id] = {\n  status: 'pending',\n  name: t.user_name,\n  email: t.user_email,\n  message: t.user_message,\n  summary,\n  draft,\n  created_at: now\n};\n\nreturn {\n  json: {\n    ticket_id: t.ticket_id,\n    user_name: t.user_name,\n    user_email: t.user_email,\n    has_valid_email: t.has_valid_email,\n    user_message: t.user_message,\n    user_message_html: t.user_message_html,\n    user_name_html: t.user_name_html,\n    summary,\n    summary_html: summary.replace(/&/g, '&amp;').replace(/</g, '&lt;'),\n    draft_html: (draft || '(none)').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\\n/g, '<br>'),\n    draft\n  }\n};"
+      },
+      "id": "b9938f46-a8d6-4311-8438-ec469b4c23f1",
+      "name": "Code: Save Ticket",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -32
+      ]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { status: 'transferred', message: 'Hey ' + $('Code: Clean Text & Format Inputs').item.json.user_name + ', we got a support agent to attend to you! Our team will reach out to you shortly at ' + $('Code: Clean Text & Format Inputs').item.json.user_email + '.' } }}",
+        "responseBody": "={{ { status: 'transferred', ticket_id: $json.ticket_id, message: 'Thanks ' + $json.user_name + '! A member of our team is looking at your question and will reply here shortly' + ($json.has_valid_email ? ' (we’ll also email you at ' + $json.user_email + ')' : '') + '.' } }}",
         "options": {}
       },
-      "id": "f53cec9a-d548-4e61-aaaf-c477e1cd4ac0",
+      "id": "4966cd25-a199-4cf7-aedb-6b307ccb7fc6",
       "name": "Respond: Support Agent Escalation",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [688, -96]
+      "position": [
+        848,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "n8ncapetown@gmail.com",
+        "subject": "=[Ticket #{{ $json.ticket_id }}] {{ $json.user_name }}: {{ $json.summary.substring(0, 70) }}",
+        "message": "=<h3>New support request — Ticket #{{ $json.ticket_id }}</h3>\n<p><b>From:</b> {{ $json.user_name_html }} ({{ $json.user_email || 'no email given' }})</p>\n<p><b>Message:</b><br>{{ $json.user_message_html }}</p>\n<p><b>AI summary:</b> {{ $json.summary_html }}</p>\n<p><b>Suggested draft:</b><br>{{ $json.draft_html }}</p>\n<hr>\n<p>➡️ <b>Reply to this email</b> with your answer. It will be emailed to the customer and shown on the website.<br>Or reply with just <b>APPROVE</b> to send the suggested draft as-is.</p>\n<p style=\"color:#888;font-size:12px\">Keep “Ticket #{{ $json.ticket_id }}” in the subject line.</p>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AceSoftwares Support"
+        }
+      },
+      "id": "76a22b03-a6e9-4557-bdc1-6e86291e06fd",
+      "name": "Gmail: Notify Owner",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1088,
+        -144
+      ],
+      "webhookId": "338b423e-e30f-4dba-b96f-6c46ab35836d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "x07bOucxQcqrWlMj",
+          "name": "acetheacademia.info"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.user_email }}",
+        "subject": "We received your message — AceSoftwares",
+        "message": "=<p>Hi {{ $json.user_name_html }},</p>\n<p>Thanks for reaching out! A member of our team is reviewing your question and will get back to you shortly.</p>\n<p><b>Your message:</b><br>{{ $json.user_message_html }}</p>\n<p>Reference: {{ $json.ticket_id }}</p><p style=\"color:#888;font-size:12px\">AceSoftwares · acesoftwares.tech</p>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AceSoftwares Support"
+        }
+      },
+      "id": "29a9e845-0287-4bef-8f5b-bb6c67939a63",
+      "name": "Gmail: Customer Acknowledgement",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1088,
+        80
+      ],
+      "webhookId": "c625fcea-460a-4cbc-88b9-64f0cdc499f7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "x07bOucxQcqrWlMj",
+          "name": "acetheacademia.info"
+        }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ { status: 'success', message: $('AI Agent: Answer Support Query').item.json.output } }}",
+        "responseBody": "={{ { status: 'success', ticket_id: $('Code: Clean Inputs & Create Ticket').item.json.ticket_id, message: $json.output } }}",
         "options": {}
       },
-      "id": "ffc1e5e6-85e0-44de-8806-8afe0ec56b92",
+      "id": "20ddccd9-d751-4963-9d8e-fd339093d959",
       "name": "Respond: Automated AI Answer",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [688, 144]
+      "position": [
+        624,
+        304
+      ]
     },
     {
       "parameters": {
-        "sendTo": "info@acetheacademia.com, n8ncapetown@gmail.com",
-        "subject": "=🔴 Needs a person: {{ $('Code: Clean Text & Format Inputs').item.json.user_name }} ({{ $('Code: Clean Text & Format Inputs').item.json.user_company || 'no company' }})",
-        "emailType": "text",
-        "message": "=A website visitor needs a reply from the team.\n\nName: {{ $('Code: Clean Text & Format Inputs').item.json.user_name }}\nEmail: {{ $('Code: Clean Text & Format Inputs').item.json.user_email }}\nCompany: {{ $('Code: Clean Text & Format Inputs').item.json.user_company }}\nInterested in: {{ $('Code: Clean Text & Format Inputs').item.json.user_interest }}\nSource: {{ $('Code: Clean Text & Format Inputs').item.json.source }} ({{ $('Code: Clean Text & Format Inputs').item.json.page }})\nReceived: {{ $('Code: Clean Text & Format Inputs').item.json.submitted_at }}\n\nMessage:\n{{ $('Code: Clean Text & Format Inputs').item.json.user_message }}\n\nThey were told a support agent will reach out shortly.",
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "762e008f-a94d-48dd-8766-66d7895087b0",
+              "leftValue": "={{ $('Code: Clean Inputs & Create Ticket').item.json.wants_email_copy }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "2bcf4156-0f24-4ec7-831e-4bbdf9998b18",
+              "leftValue": "={{ $('Code: Clean Inputs & Create Ticket').item.json.has_valid_email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "380ffe4b-f004-4a21-9011-37683506598f",
+      "name": "If: Wants Email Copy?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        848,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Code: Clean Inputs & Create Ticket').item.json.user_email }}",
+        "subject": "Your answer from AceSoftwares",
+        "message": "=<p>Hi {{ $('Code: Clean Inputs & Create Ticket').item.json.user_name_html }},</p>\n<p>{{ $json.output.replace(/\\n/g, '<br>') }}</p>\n<p>Need more help? Just reply to this email.</p><p style=\"color:#888;font-size:12px\">AceSoftwares · acesoftwares.tech</p>",
         "options": {
           "appendAttribution": false,
-          "replyTo": "={{ $('Code: Clean Text & Format Inputs').item.json.user_email }}"
+          "senderName": "AceSoftwares Support"
         }
       },
-      "id": "a1c0e7b2-5d41-4f0a-9c3e-1b2d3e4f5a61",
-      "name": "Gmail: Alert Team (Needs a Person)",
+      "id": "424c6eb5-a571-47a6-885b-d325bdd1e331",
+      "name": "Gmail: Send AI Answer Copy",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
-      "position": [928, -192],
+      "position": [
+        1088,
+        288
+      ],
+      "webhookId": "6abc0ae5-26d5-496e-b543-1724103b4c60",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "x07bOucxQcqrWlMj",
+          "name": "acetheacademia.info"
+        }
+      },
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "sendTo": "={{ $('Code: Clean Text & Format Inputs').item.json.user_email }}",
-        "subject": "We've received your message — AceSoftwares",
-        "emailType": "text",
-        "message": "=Hi {{ $('Code: Clean Text & Format Inputs').item.json.user_name }},\n\nThanks for contacting AceSoftwares. A member of our team will get back to you shortly.\n\nYour message:\n{{ $('Code: Clean Text & Format Inputs').item.json.user_message }}\n\nWe offer 24/7 support. If it's urgent, reply to this email or write to info@acetheacademia.com.\n\nThe AceSoftwares team\nhttps://acesoftwares.tech",
-        "options": {
-          "appendAttribution": false,
-          "replyTo": "info@acetheacademia.com"
-        }
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "q": "in:inbox subject:\"Ticket #AS-\" from:n8ncapetown@gmail.com",
+          "readStatus": "unread"
+        },
+        "options": {}
       },
-      "id": "b2d1f8c3-6e52-4a1b-8d4f-2c3e4f5a6b72",
-      "name": "Gmail: Confirm to Customer",
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [928, -16],
-      "onError": "continueRegularOutput"
+      "id": "8d45ed28-4df1-440d-9301-a543e20fecc9",
+      "name": "Gmail Trigger: Owner Replies",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        704
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "x07bOucxQcqrWlMj",
+          "name": "acetheacademia.info"
+        }
+      }
     },
     {
       "parameters": {
-        "sendTo": "={{ $('Code: Clean Text & Format Inputs').item.json.user_email }}",
-        "subject": "Your question to AceSoftwares",
-        "emailType": "text",
-        "message": "=Hi {{ $('Code: Clean Text & Format Inputs').item.json.user_name }},\n\nThanks for your message. Here's the answer from our support assistant:\n\n{{ $('AI Agent: Answer Support Query').item.json.output }}\n\nYour question:\n{{ $('Code: Clean Text & Format Inputs').item.json.user_message }}\n\nNeed more help? Just reply to this email and a person on our team will pick it up. We offer 24/7 support.\n\nThe AceSoftwares team\nhttps://acesoftwares.tech",
+        "jsCode": "// Turn the owner's email reply into a customer answer\nconst OWNER_EMAIL = 'n8ncapetown@gmail.com'.toLowerCase();   // <-- the mailbox you reply from\n\nconst store = $getWorkflowStaticData('global');\nstore.tickets = store.tickets || {};\n\nfunction stripQuoted(t) {\n  t = '\\n' + String(t).replace(/\\r/g, '');\n  const markers = [\n    /\\n\\s*On [\\s\\S]{0,300}?wrote:\\s*\\n/i,          // Gmail / Apple Mail\n    /\\n\\s*-{2,}\\s*Original Message/i,               // Outlook (classic)\n    /\\n\\s*_{10,}/,                                   // Outlook (web)\n    /\\n\\s*From:\\s.+\\n\\s*(Sent|Date):/i,              // Outlook headers\n    /\\n>/                                            // quoted lines\n  ];\n  let cut = t.length;\n  for (const m of markers) {\n    const i = t.search(m);\n    if (i >= 0 && i < cut) cut = i;\n  }\n  return t.slice(0, cut).trim();\n}\n\nconst results = [];\nfor (const item of $input.all()) {\n  const e = item.json;\n  const subject = String(e.subject || '');\n  const fromAddr = String(e.from?.value?.[0]?.address || e.from?.text || e.from || '').toLowerCase();\n\n  if (!fromAddr.includes(OWNER_EMAIL)) continue;                 // only accept replies from you\n  if (!/^\\s*(re|aw|sv|antw)\\s*:/i.test(subject)) continue;       // must be a reply\n  const m = subject.match(/Ticket #(AS-[A-Z0-9]+)/i);\n  if (!m) continue;\n\n  const id = m[1].toUpperCase();\n  const ticket = store.tickets[id];\n  if (!ticket) continue;\n\n  let text = e.text || e.textPlain || '';\n  if (!text && (e.html || e.textHtml)) {\n    text = String(e.html || e.textHtml)\n      .replace(/<br\\s*\\/?>/gi, '\\n')\n      .replace(/<\\/p>/gi, '\\n')\n      .replace(/<[^>]+>/g, '');\n  }\n\n  let answer = stripQuoted(text);\n  if (/^(approve|approved|ok|send|send it|yes)[.!]?$/i.test(answer)) answer = ticket.draft;\n  if (!answer) continue;\n\n  ticket.status = 'answered';\n  ticket.answer = answer;\n  ticket.answered_at = Date.now();\n\n  results.push({\n    json: {\n      ticket_id: id,\n      gmail_message_id: e.id,\n      user_name: ticket.name,\n      user_email: ticket.email,\n      user_message: ticket.message,\n      user_message_html: String(ticket.message).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/\\n/g, '<br>'),\n      answer\n    }\n  });\n}\nreturn results;"
+      },
+      "id": "d79440e7-deb4-4593-8574-2550705f5f78",
+      "name": "Code: Parse Owner Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        704
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.user_email }}",
+        "subject": "Re: Your question to AceSoftwares",
+        "message": "=<p>Hi {{ $json.user_name }},</p>\n<p>{{ $json.answer.replace(/\\n/g, '<br>') }}</p>\n<hr>\n<p style=\"color:#666\"><b>You asked:</b><br>{{ $json.user_message_html }}</p><p style=\"color:#888;font-size:12px\">AceSoftwares · acesoftwares.tech</p>",
         "options": {
           "appendAttribution": false,
-          "replyTo": "info@acetheacademia.com"
+          "senderName": "AceSoftwares Support"
         }
       },
-      "id": "c3e2a9d4-7f63-4b2c-9e5a-3d4f5a6b7c83",
+      "id": "d2c6381c-f1a7-4e31-a9e7-f3cc1c671b7e",
       "name": "Gmail: Send Answer to Customer",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
-      "position": [928, 144],
+      "position": [
+        -64,
+        608
+      ],
+      "webhookId": "6c9f41ae-42c1-4848-9c68-2a161dd93f9e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "x07bOucxQcqrWlMj",
+          "name": "acetheacademia.info"
+        }
+      },
       "onError": "continueRegularOutput"
     },
     {
       "parameters": {
-        "sendTo": "info@acetheacademia.com, n8ncapetown@gmail.com",
-        "subject": "=✅ Answered by AI: {{ $('Code: Clean Text & Format Inputs').item.json.user_name }} ({{ $('Code: Clean Text & Format Inputs').item.json.user_company || 'no company' }})",
-        "emailType": "text",
-        "message": "=The support assistant answered a website enquiry. Please check it and follow up if needed — every enquiry is a potential lead.\n\nName: {{ $('Code: Clean Text & Format Inputs').item.json.user_name }}\nEmail: {{ $('Code: Clean Text & Format Inputs').item.json.user_email }}\nCompany: {{ $('Code: Clean Text & Format Inputs').item.json.user_company }}\nInterested in: {{ $('Code: Clean Text & Format Inputs').item.json.user_interest }}\nSource: {{ $('Code: Clean Text & Format Inputs').item.json.source }} ({{ $('Code: Clean Text & Format Inputs').item.json.page }})\n\nMessage:\n{{ $('Code: Clean Text & Format Inputs').item.json.user_message }}\n\nAI answer sent:\n{{ $('AI Agent: Answer Support Query').item.json.output }}",
+        "method": "POST",
+        "url": "https://acesoftwares.tech/api/support-reply",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ticket_id: $json.ticket_id, email: $json.user_email, answer: $json.answer }) }}",
+        "options": {}
+      },
+      "id": "490d56ac-08f1-455c-818d-c22a603267bb",
+      "name": "HTTP Request: Push Answer to Website",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        800
+      ],
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "path": "acesoftwares-ticket-status",
+        "responseMode": "responseNode",
         "options": {
-          "appendAttribution": false,
-          "replyTo": "={{ $('Code: Clean Text & Format Inputs').item.json.user_email }}"
+          "allowedOrigins": "https://acesoftwares.tech,https://www.acesoftwares.tech,http://localhost:5173"
         }
       },
-      "id": "d4f3bae5-8a74-4c3d-8f6b-4e5a6b7c8d94",
-      "name": "Gmail: Copy to Team (Answered)",
+      "id": "81743b4f-046a-4aec-bfa1-9c4c321da436",
+      "name": "Webhook: Ticket Status",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        1040
+      ],
+      "webhookId": "39984039-5a41-4d78-a64a-e23d39faf094"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Website polls this to show the human answer\nconst id = String($('Webhook: Ticket Status').first().json.query?.id || '').trim().toUpperCase();\nconst tickets = $getWorkflowStaticData('global').tickets || {};\nconst t = tickets[id];\n\nif (!t) return [{ json: { ticket_id: id, status: 'not_found' } }];\n\nreturn [{\n  json: {\n    ticket_id: id,\n    status: t.status,\n    answer: t.status === 'answered' ? t.answer : null,\n    answered_at: t.answered_at ? new Date(t.answered_at).toISOString() : null\n  }\n}];"
+      },
+      "id": "d8200286-3efd-4ef0-8d68-629056d5e69e",
+      "name": "Code: Lookup Ticket",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "27f37c83-7ad0-4d95-8a4f-2136dda3eac2",
+      "name": "Respond: Ticket Status",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        1040
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $('Code: Parse Owner Reply').item.json.gmail_message_id }}"
+      },
+      "id": "e5df9ab3-bad0-463c-b22b-237f2c397a7a",
+      "name": "Gmail: Mark Reply as Read",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
-      "position": [928, 320],
+      "position": [
+        192,
+        608
+      ],
+      "webhookId": "562358a6-68a1-47e5-ad9c-363b6795dcd0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "x07bOucxQcqrWlMj",
+          "name": "acetheacademia.info"
+        }
+      },
       "onError": "continueRegularOutput"
     }
   ],
   "connections": {
     "Webhook: Contact Form": {
-      "main": [[{ "node": "HTTP Request: Load Knowledge Base", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "HTTP Request: Load Knowledge Base",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    "HTTP Request: Load Knowledge Base": {
-      "main": [[{ "node": "Code: Clean Text & Format Inputs", "type": "main", "index": 0 }]]
-    },
-    "Code: Clean Text & Format Inputs": {
-      "main": [[{ "node": "AI Agent: Answer Support Query", "type": "main", "index": 0 }]]
+    "Code: Clean Inputs & Create Ticket": {
+      "main": [
+        [
+          {
+            "node": "AI Agent: Answer Support Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "AI Agent: Answer Support Query": {
-      "main": [[{ "node": "If: Needs a Person?", "type": "main", "index": 0 }]]
-    },
-    "If: Needs a Person?": {
       "main": [
-        [{ "node": "Respond: Support Agent Escalation", "type": "main", "index": 0 }],
-        [{ "node": "Respond: Automated AI Answer", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "If: Needs Human?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Azure OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent: Answer Support Query",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent: Answer Support Query",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If: Needs Human?": {
+      "main": [
+        [
+          {
+            "node": "Code: Save Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond: Automated AI Answer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Save Ticket": {
+      "main": [
+        [
+          {
+            "node": "Respond: Support Agent Escalation",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Respond: Support Agent Escalation": {
-      "main": [[
-        { "node": "Gmail: Alert Team (Needs a Person)", "type": "main", "index": 0 },
-        { "node": "Gmail: Confirm to Customer", "type": "main", "index": 0 }
-      ]]
+      "main": [
+        [
+          {
+            "node": "Gmail: Notify Owner",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Gmail: Customer Acknowledgement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Respond: Automated AI Answer": {
-      "main": [[
-        { "node": "Gmail: Send Answer to Customer", "type": "main", "index": 0 },
-        { "node": "Gmail: Copy to Team (Answered)", "type": "main", "index": 0 }
-      ]]
+      "main": [
+        [
+          {
+            "node": "If: Wants Email Copy?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    "Azure OpenAI Chat Model3": {
-      "ai_languageModel": [[{ "node": "AI Agent: Answer Support Query", "type": "ai_languageModel", "index": 0 }]]
+    "If: Wants Email Copy?": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Send AI Answer Copy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    "Simple Memory": {
-      "ai_memory": [[{ "node": "AI Agent: Answer Support Query", "type": "ai_memory", "index": 0 }]]
+    "Gmail Trigger: Owner Replies": {
+      "main": [
+        [
+          {
+            "node": "Code: Parse Owner Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Parse Owner Reply": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Send Answer to Customer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request: Push Answer to Website",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail: Send Answer to Customer": {
+      "main": [
+        [
+          {
+            "node": "Gmail: Mark Reply as Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook: Ticket Status": {
+      "main": [
+        [
+          {
+            "node": "Code: Lookup Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code: Lookup Ticket": {
+      "main": [
+        [
+          {
+            "node": "Respond: Ticket Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request: Load Knowledge Base": {
+      "main": [
+        [
+          {
+            "node": "Code: Clean Inputs & Create Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f69d85c7490a0bde8258923aa6f503f386fa239e570555eca564ab5ae23953e9"
+  },
+  "name": "AceSoftwares — Website support with tickets",
   "settings": {
     "executionOrder": "v1"
-  },
-  "meta": {
-    "instanceId": "f69d85c7490a0bde8258923aa6f503f386fa239e570555eca564ab5ae23953e9"
   }
 }

@@ -188,6 +188,12 @@
 .sreply--compact { padding: 0; background: none; animation-duration: 0.3s; }
 .sreply--compact .sreply__msg { max-height: 260px; overflow: auto; background: var(--grey); font-size: 14.5px; }
 
+.sreply__wait { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 13.5px; color: var(--muted); }
+.sreply__msg--answer { border-left: 3px solid var(--ok); animation: rise 0.5s ease both; }
+.ecopy { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--muted); cursor: pointer; }
+.ecopy input { width: 16px; height: 16px; accent-color: var(--accent); }
+.supchip__badge { position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; animation: ping 1.8s infinite; }
+
 .supchip { border: 0; cursor: pointer; }
 .supchip.is-open { background: var(--dark-3); }
 .swidget {
