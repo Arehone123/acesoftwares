@@ -1,47 +1,31 @@
-import { useState } from 'react'
-import Nav from './components/Nav.jsx'
-import Hero from './components/Hero.jsx'
-import Strip from './components/Strip.jsx'
-import Products from './components/Products.jsx'
-import Workflows from './components/Workflows.jsx'
-import Pricing from './components/Pricing.jsx'
-import RoiCalculator from './components/RoiCalculator.jsx'
-import Partners from './components/Partners.jsx'
-import Process from './components/Process.jsx'
-import Faq from './components/Faq.jsx'
-import Contact from './components/Contact.jsx'
-import Footer from './components/Footer.jsx'
+import { Route, Routes } from 'react-router-dom'
+import { Footer, Nav, ScrollToTop } from './components/Chrome.jsx'
+import Home from './pages/Home.jsx'
+import { Product, ProductsIndex } from './pages/Products.jsx'
+import { WorkflowDetail, WorkflowsIndex } from './pages/Workflows.jsx'
+import Integrations from './pages/Integrations.jsx'
+import Solution from './pages/Solution.jsx'
+import Pricing from './pages/Pricing.jsx'
+import { Contact, NotFound } from './pages/Contact.jsx'
 
 export default function App() {
-  // Shared so pricing buttons and the ROI calculator can pre-fill the contact form
-  const [interest, setInterest] = useState('Not sure yet — audit me')
-  const [message, setMessage] = useState('')
-
-  const pick = (value, prefill = '') => {
-    setInterest(value)
-    if (prefill) setMessage(prefill)
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
     <>
+      <ScrollToTop />
       <Nav />
       <main>
-        <Hero />
-        <Strip />
-        <Products onPick={pick} />
-        <Workflows />
-        <Pricing onPick={pick} />
-        <RoiCalculator onPick={pick} />
-        <Partners />
-        <Process />
-        <Faq />
-        <Contact
-          interest={interest}
-          setInterest={setInterest}
-          message={message}
-          setMessage={setMessage}
-        />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<ProductsIndex />} />
+          <Route path="/products/:id" element={<Product />} />
+          <Route path="/workflows" element={<WorkflowsIndex />} />
+          <Route path="/workflows/:slug" element={<WorkflowDetail />} />
+          <Route path="/integrations" element={<Integrations />} />
+          <Route path="/solutions/:id" element={<Solution />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </main>
       <Footer />
     </>
