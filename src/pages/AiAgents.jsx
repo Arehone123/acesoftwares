@@ -36,7 +36,7 @@ const agents = [
 
 const faqs = [
   ['What counts as an execution?', 'One run of an agent from start to finish: for example, reading one email and replying, or reading one invoice and posting it. Multi-step runs on the Pro plan can include several AI calls and document parsing within a single execution.'],
-  ['How did you work out the pages and words?', `We assume one page is about ${WORDS_PER_PAGE} words. Starter assumes about one page per execution; Pro assumes about two pages per multi-step execution. Short messages use far less, so you can usually handle more items than the page figures suggest.`],
+  ['How did you work out the pages and words?', `We assume one page is about ${WORDS_PER_PAGE} words. Each plan includes a monthly page allowance: about 20,000 pages on Starter, 100,000 on Pro and 700,000 on Enterprise. Short messages use far less than a page, so you can usually handle more items than the page figures suggest.`],
   ['What happens if we go over our allowance?', 'Your agents keep running. We let you know when you reach 80% of your plan, and if you regularly need more, we move you to the next plan or agree a custom allowance.'],
   ['Can we use our own AI accounts instead?', 'Yes. Bring your own OpenAI, Anthropic or Google keys and pay the provider directly at cost. The managed plans are for teams that prefer one fixed monthly price with no surprise token bills.'],
   ['Is our data used to train the AI?', 'We use business API accounts with AI providers whose API terms say they do not train on API data by default. For sensitive work we can use models hosted in your region or on your own infrastructure.'],

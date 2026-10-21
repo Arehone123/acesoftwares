@@ -91,7 +91,7 @@ export const faqs = [
   ['What does the R450/hour retainer cover?', 'Hosting management, monitoring, bug fixes, API changes, new features and small workflows for your Ace OS products. You choose how many hours per month you need. Unused hours roll over for one month.'],
   ['Why n8n?', 'n8n is open and extensible. It can be self-hosted, which keeps sensitive data in South Africa, and it connects to hundreds of services. It also lets us mix visual workflows with custom code and AI agents when a process needs it.'],
   ['Who pays for software subscriptions and AI tokens?', 'Your choice. Bring your own AI keys and subscriptions in your company’s name and pay providers directly at cost, or use our managed AI plans: a fixed monthly price that includes the AI usage, with no surprise token bills.'],
-  ['How much can an AI agent read on each plan?', 'As a guide: Starter covers about 10,000 pages (roughly 5 million words) a month, Pro about 100,000 pages (roughly 50 million words), and Enterprise is sized to your volumes. We assume one page is about 500 words.'],
+  ['How much can an AI agent read on each plan?', 'As a guide: Starter covers about 20,000 pages (roughly 10 million words) a month, Pro about 100,000 pages (roughly 50 million words), and Enterprise about 700,000 pages (roughly 350 million words). We assume one page is about 500 words.'],
   ['Where is everything hosted?', 'On n8n Cloud or on your own infrastructure. Through our partner Sovrinn we can also provide managed data centre hosting and monitoring.'],
   ['What if a workflow breaks?', 'Every workflow has error handling, retries and failure alerts. When something does break, such as a third-party API changing, we fix it within the response time of your plan.'],
 ]
@@ -109,7 +109,7 @@ export const aiTiers = [
     price: 'R500 – R1,000',
     per: '/month',
     executions: 10000,
-    pagesPerExecution: 1,
+    pages: 20000,
     kind: 'lightweight / standard executions',
     desc: 'For one or two agents doing everyday work: answering questions, sorting emails, drafting replies.',
     examples: ['Email & WhatsApp triage', 'FAQ / support answers', 'Short summaries & replies', 'Data extraction from forms'],
@@ -119,7 +119,7 @@ export const aiTiers = [
     price: 'R2,500 – R5,000',
     per: '/month',
     executions: 50000,
-    pagesPerExecution: 2,
+    pages: 100000,
     featured: true,
     kind: 'multi-step LLM executions + document parsing',
     desc: 'For teams running several agents that reason over documents and take actions across systems.',
@@ -130,7 +130,7 @@ export const aiTiers = [
     price: 'From R10,000',
     per: '/month',
     executions: null,
-    pagesPerExecution: null,
+    pages: 700000,
     kind: 'heavy document processing & multi-agent systems',
     desc: 'For high-volume, unstructured documents and complex multi-agent processes. Sized to your volumes.',
     examples: ['Bulk unstructured extraction', 'Multi-agent orchestration', 'Large knowledge bases (RAG)', 'Premium reasoning models'],
@@ -138,8 +138,8 @@ export const aiTiers = [
 ]
 
 export const tierCapacity = (t) => {
-  if (!t.executions) return null
-  const pages = t.executions * t.pagesPerExecution
+  if (!t.pages) return null
+  const pages = t.pages
   return {
     pages,
     words: pages * WORDS_PER_PAGE,
