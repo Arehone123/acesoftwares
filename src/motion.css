@@ -1,7 +1,14 @@
 /* =========================================================
    AceSoftwares identity + motion layer (loaded after styles.css)
    ========================================================= */
+/* Brand colours taken from the AceSoftwares logo (/public/logo.svg) */
 :root {
+  --accent: #ea4b71;
+  --accent-bg: #ffc9d6;
+  --accent-ink: #6b0f2a;
+  --dark: #1b1828;
+  --dark-2: #26223a;
+  --dark-3: #36314f;
   --violet: #8b5cf6;
   --grad: linear-gradient(100deg, var(--accent) 0%, #f2477e 50%, var(--violet) 100%);
 }
@@ -195,6 +202,11 @@ main { animation: pagein 0.5s ease both; }
 .ctaband > * { position: relative; }
 main { overflow-x: clip; }
 .hl { background: var(--grad); color: #fff; }
+
+/* AceSoftwares logo */
+.logo__img { width: 34px; height: 34px; border-radius: 9px; display: block; transition: transform 0.35s cubic-bezier(.3, 1.6, .5, 1); }
+.logo:hover .logo__img { transform: rotate(-8deg) scale(1.08); }
+.footer .logo__img { width: 40px; height: 40px; }
 
 /* Official brand logos */
 .mono--logo { background: #fff; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06); }

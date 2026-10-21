@@ -44,17 +44,19 @@ export const SIMPLE_ICONS = {
   YouTube: siYoutube,
 }
 
-// Brands NOT available in Simple Icons (Microsoft asked for its logos to be removed; Paystack, Pipedrive
-// and Sovrinn were never added). Download the official SVG from each company's brand/press page, save it in
-// /public/logos/ and uncomment the line — the site picks it up everywhere automatically.
+// Brands NOT in Simple Icons, served from /public/logos/:
+//   microsoft-teams, pipedrive, microsoft-365 — SVG Logos by Gil Barbara (CC0)
+//   outlook, excel — VS Code Icons (MIT)
+// Still missing (no free official version): SharePoint, Paystack, Sovrinn. Save the official SVG from the
+// company's brand page into /public/logos/ and uncomment its line — it then appears everywhere automatically.
 export const LOGO_FILES = {
-  // 'Microsoft Teams': '/logos/microsoft-teams.svg',
-  // Outlook: '/logos/outlook.svg',
-  // 'Microsoft Excel 365': '/logos/excel.svg',
+  'Microsoft Teams': '/logos/microsoft-teams.svg',
+  Outlook: '/logos/outlook.svg',
+  'Microsoft Excel 365': '/logos/excel.svg',
+  'Microsoft 365': '/logos/microsoft-365.svg',
+  Pipedrive: '/logos/pipedrive.svg',
   // SharePoint: '/logos/sharepoint.svg',
-  // 'Microsoft 365': '/logos/microsoft-365.svg',
   // Paystack: '/logos/paystack.svg',
-  // Pipedrive: '/logos/pipedrive.svg',
   // Sovrinn: '/logos/sovrinn.svg',
 }
 

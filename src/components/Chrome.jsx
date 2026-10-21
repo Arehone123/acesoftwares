@@ -8,13 +8,7 @@ import { partners, CONTACT_EMAILS, SUPPORT_HOURS } from '../data/site.js'
 export function Logo({ light = false }) {
   return (
     <Link to="/" className={`logo ${light ? 'logo--light' : ''}`} aria-label="AceSoftwares home">
-      <svg className="logo__mark" viewBox="0 0 40 20" aria-hidden="true">
-        <circle cx="5" cy="10" r="4" />
-        <path d="M9 10 H 15" />
-        <rect x="15" y="4" width="12" height="12" rx="3" />
-        <path d="M27 10 H 31" />
-        <circle cx="35" cy="10" r="4" />
-      </svg>
+      <img className="logo__img" src="/logo.svg" alt="" width="34" height="34" />
       <span>acesoftwares</span>
     </Link>
   )

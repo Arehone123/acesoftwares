@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@iconify-json/logos": "^1.2.4",
+    "@iconify-json/vscode-icons": "^1.2.20",
     "@n8n_io/n8n-demo-component": "^1.0.20",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
