@@ -1,6 +1,6 @@
 // Workflow template library. `flow` = columns of [label, icon, sub]; each column connects to the next.
 // `hours` = manual hours saved per week for a typical team. Newest templates go at the end.
-export const categories = ['AI', 'Finance', 'HR', 'Sales', 'IT Ops', 'Tenders', 'Operations', 'Document Ops']
+export const categories = ['AI', 'Finance', 'HR', 'Sales', 'IT Ops', 'Tenders', 'Mining', 'Operations', 'Document Ops']
 
 export const workflows = [
   {
@@ -107,17 +107,18 @@ export const workflows = [
   },
   {
     slug: 'daily-ops-report',
-    title: 'Compile a daily operations report from sensors and spreadsheets',
-    cat: 'Operations', app: 'mining-pulse', hours: 7,
+    title: 'Build the morning production pack from ShaftPulse, with the rand at risk per blocker',
+    cat: 'Mining', app: 'shaftpulse', hours: 7,
     tools: ['PostgreSQL', 'Microsoft Excel 365', 'OpenAI', 'Outlook'],
     flow: [
-      [['06:00 daily', 'clock', 'Schedule']],
-      [['Sensor data', 'db', 'Historian'], ['Shift sheets', 'sheet', 'Excel']],
+      [['05:30 daily', 'clock', 'Schedule']],
+      [['Open issues', 'db', 'ShaftPulse'], ['Shift sheets', 'sheet', 'Excel']],
+      [['Price & rank', 'code', 'kg/day × R/kg']],
       [['Summarise', 'bot', 'AI agent']],
-      [['Email PDF', 'mail', 'Management']],
+      [['Email pack', 'mail', 'Outlook']],
     ],
-    overview: 'Production figures, downtime and incidents from the previous day are pulled together and summarised in plain language, with the PDF in management’s inbox before the morning meeting.',
-    how: ['Runs at 06:00 every day.', 'Reads sensor data and the latest shift spreadsheets.', 'AI writes a short narrative of what changed and why.', 'Emails a formatted PDF to the distribution list.'],
+    overview: 'Every open underground issue is ranked by the rand value of production it puts at risk, combined with the previous shift’s figures, and summarised in plain language, so the morning meeting starts with what matters most.',
+    how: ['Runs before the morning production meeting.', 'Reads open ShaftPulse issues and the latest shift sheets.', 'Prices each blocker at kilograms per day at risk × gold price, and ranks them.', 'Emails the pack with each owner department’s commitments and overdue safety items.'],
   },
   {
     slug: 'maintenance-ticket-dispatch',
@@ -135,17 +136,18 @@ export const workflows = [
   },
   {
     slug: 'grievance-intake',
-    title: 'Log community grievances from WhatsApp and escalate urgent ones',
-    cat: 'Operations', app: 'community-pulse', hours: 8,
+    title: 'Take host-community grievances by USSD or WhatsApp, cluster them and escalate missed dates',
+    cat: 'Mining', app: 'minepulse', hours: 8,
     tools: ['WhatsApp', 'OpenAI', 'Twilio SMS'],
     flow: [
-      [['WhatsApp message', 'whatsapp', 'Trigger']],
-      [['Translate & classify', 'bot', 'AI agent']],
-      [['Urgent?', 'if', 'Branch']],
-      [['Alert liaison', 'bell', 'SMS + call'], ['Log grievance', 'handshake', 'Community Pulse']],
+      [['USSD / WhatsApp', 'phone', 'Trigger']],
+      [['SMS reference', 'send', 'Twilio SMS']],
+      [['Translate & cluster', 'bot', 'AI agent']],
+      [['Over threshold?', 'if', 'Branch']],
+      [['Alert owner + SRO', 'bell', 'Escalate'], ['Add to case', 'handshake', 'MinePulse']],
     ],
-    overview: 'Community members report issues in their own language. Messages are translated, classified and logged, and anything urgent reaches a community liaison officer immediately.',
-    how: ['Accepts messages in multiple South African languages.', 'Classifies topic, location and urgency.', 'Logs the grievance with a reference number.', 'Escalates urgent issues by SMS and phone call.'],
+    overview: 'Residents report in their own language from any phone. Each report gets an SMS reference in seconds, joins the matching case for that community, and alerts the owner department when a cluster crosses its threshold. Missed commitment dates escalate automatically.',
+    how: ['Accepts USSD (no data needed) and WhatsApp in six South African languages.', 'Sends an SMS reference number straight away.', 'Joins reports about the same issue in the same community into one case.', 'Alerts the owner and Stakeholder Relations at the threshold, and escalates missed dates.'],
   },
   {
     slug: 'contract-review-assistant',

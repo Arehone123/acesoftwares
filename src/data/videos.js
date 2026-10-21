@@ -21,7 +21,8 @@ export const videos = {
 
 // Which video to show on each product / solution / workflow category page.
 export const videoFor = {
-  'mining-pulse': 'selfHosting',
+  minepulse: 'whatsappAssistant',
+  shaftpulse: 'agentsVsWorkflows',
   'community-pulse': 'whatsappAssistant',
   'property-os': 'whatsappAssistant',
   'admin-os': 'assistant',
@@ -38,6 +39,7 @@ export const videoFor = {
   Sales: 'whatsappAssistant',
   'IT Ops': 'selfHosting',
   Tenders: 'agentsVsWorkflows',
+  Mining: 'agentsVsWorkflows',
   Operations: 'buildItYourself',
   'Document Ops': 'assistant',
 }

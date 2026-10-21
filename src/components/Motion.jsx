@@ -11,6 +11,7 @@ const REVEAL = [
   '.bigtile', '.catcard', '.prodrow', '.offer', '.support__card', '.stat', '.split3__card', '.keep', '.roi__in',
   '.roi__out', '.cform', '.evformat', '.story', '.video', '.race__lane', '.ticker-box', '.money__chart', '.wembed',
   '.testimonial', '.transform__step', '.transform__scene', '.aitier', '.captable', '.capnotes > div', '.aiest__in', '.aiest__out',
+  '.mstake', '.mcompare', '.mcalc__in', '.mcalc__out', '.mcomp__card', '.mproof__card', '.mroad__card', '.mtargets', '.mguard > div',
 ].join(',')
 
 /** Watches the page and animates matching elements in on scroll. Re-runs on every route change. */

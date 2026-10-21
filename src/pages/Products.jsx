@@ -14,7 +14,7 @@ export function ProductsIndex() {
       <section className="hero hero--page">
         <div className="container hero__copy">
           <span className="tag">PRODUCTS</span>
-          <h1>Eight operating systems.<br />One automation backbone.</h1>
+          <h1>{apps.length} operating systems.<br />One automation backbone.</h1>
           <p className="lead">Each Ace OS product is a complete web app for one part of your business, with n8n workflows doing the repetitive work behind it.</p>
         </div>
       </section>
@@ -54,7 +54,9 @@ export function Product() {
           <p className="lead">{app.desc}</p>
           <div className="btns btns--center">
             <Link to="/contact" state={{ interest: 'Apps — Growth', message: `I'd like a demo of ${app.name}.` }} className="btn btn--accent">BOOK A DEMO</Link>
-            <Link to="/pricing" className="btn btn--grey">FROM R{RETAINER_RATE}/HOUR</Link>
+            {app.priceNote
+              ? <Link to="/solutions/mining-ops" className="btn btn--grey">{app.priceNote.toUpperCase()}</Link>
+              : <Link to="/pricing" className="btn btn--grey">FROM R{RETAINER_RATE}/HOUR</Link>}
           </div>
         </div>
         <div className="container container--mid">
@@ -118,10 +120,21 @@ export function Product() {
         <div className="container">
           <div className="duo">
             <div className="duo__card">
-              <span className="tag">RETAINER</span>
-              <div className="duo__big">R{RETAINER_RATE}<span>/hour</span></div>
-              <p>Hosting, monitoring, fixes and new features for {app.name}, billed monthly on the hours you choose.</p>
-              <Link to="/pricing" className="ulink">See plans</Link>
+              {app.priceNote ? (
+                <>
+                  <span className="tag">PER OPERATION</span>
+                  <div className="duo__big">Pilot<span> first</span></div>
+                  <p>{app.name} is licensed per operation. We start with a 12-week paid pilot at one operation, measured against agreed targets.</p>
+                  <Link to="/solutions/mining-ops" className="ulink">See the mining solution</Link>
+                </>
+              ) : (
+                <>
+                  <span className="tag">RETAINER</span>
+                  <div className="duo__big">R{RETAINER_RATE}<span>/hour</span></div>
+                  <p>Hosting, monitoring, fixes and new features for {app.name}, billed monthly on the hours you choose.</p>
+                  <Link to="/pricing" className="ulink">See plans</Link>
+                </>
+              )}
             </div>
             <div className="duo__card duo__card--dark">
               <span className="tag tag--accent">GET STARTED</span>

@@ -100,7 +100,7 @@ export default function Home() {
 
       {/* PRODUCT STRIP */}
       <section className="strip">
-        <p>Eight business operating systems. One automation backbone.</p>
+        <p>{apps.length} business operating systems. One automation backbone.</p>
         <div className="strip__row">
           {apps.map((a) => (
             <Link key={a.id} to={`/products/${a.id}`} className="strip__item" title={a.name}>
@@ -175,7 +175,7 @@ export default function Home() {
 
       {/* STAT PILLS */}
       <section className="container pills3">
-        <div className="pillcard"><Icon name="workflow" size={22} /><span><b>8 products</b> built and running on n8n</span></div>
+        <div className="pillcard"><Icon name="workflow" size={22} /><span><b>{apps.length} products</b> built and running on n8n</span></div>
         <div className="pillcard"><Icon name="clock" size={22} /><span><b>R{RETAINER_RATE}/hour</b> flat monthly retainer</span></div>
         <div className="pillcard"><Icon name="gauge" size={22} /><span><b>Pay per hour saved</b>, keep {Math.round((1 - FEE_SHARE) * 100)}% of the value</span></div>
       </section>

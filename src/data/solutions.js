@@ -127,9 +127,9 @@ export const solutions = [
   },
   {
     id: 'mining-ops',
-    nav: 'Mining & Community',
+    nav: 'Mining (MinePulse + ShaftPulse)',
     title: 'From the pit to the community, nothing slips through',
-    sub: 'Mining Pulse and Community Pulse connect production, safety and stakeholder engagement in one live picture.',
+    sub: 'MinePulse handles host-community grievances outside the fence; ShaftPulse handles issues between departments inside the mine. Both give every issue an owner, a committed date, automatic escalation and a live cost, starting with a 12-week paid pilot at one operation.',
     stack: ['PostgreSQL', 'Microsoft Excel 365', 'WhatsApp', 'Twilio SMS', 'OpenAI', 'Outlook', 'SharePoint', 'Schedule'],
     pillars: [
       ['hardhat', 'Safety first', 'Incidents reach the right supervisor in minutes, with photos and location.'],
@@ -154,7 +154,7 @@ export const solutions = [
         text: 'Service intervals and telemetry flag equipment at risk and book the work order.',
         flow: [
           [['Telemetry', 'activity', 'Webhook']], [['Check limits', 'gauge', 'Code']], [['At risk?', 'if', 'Branch']],
-          [['Work order', 'wrench', 'Mining Pulse'], ['Alert foreman', 'whatsapp', 'WhatsApp']],
+          [['Work order', 'wrench', 'ShaftPulse'], ['Alert foreman', 'whatsapp', 'WhatsApp']],
         ],
       },
       {

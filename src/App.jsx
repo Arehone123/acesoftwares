@@ -10,6 +10,7 @@ import { Contact, NotFound } from './pages/Contact.jsx'
 import Events from './pages/Events.jsx'
 import Stories from './pages/Stories.jsx'
 import AiAgents from './pages/AiAgents.jsx'
+import Mining from './pages/Mining.jsx'
 import { Announcement, RevealOnScroll } from './components/Motion.jsx'
 import { SupportWidget } from './components/Support.jsx'
 
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/workflows" element={<WorkflowsIndex />} />
           <Route path="/workflows/:slug" element={<WorkflowDetail />} />
           <Route path="/integrations" element={<Integrations />} />
+          <Route path="/solutions/mining-ops" element={<Mining />} />
           <Route path="/solutions/:id" element={<Solution />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/events" element={<Events />} />

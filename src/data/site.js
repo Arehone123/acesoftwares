@@ -67,7 +67,7 @@ export const tiers = [
     name: 'Scale',
     hours: 50,
     desc: 'A full digital back office for your business.',
-    features: ['All 8 Ace OS products available', 'Dedicated automation engineer', '24/7 priority support, fixes within 4 hours', 'Custom integrations & AI agents', 'Quarterly ROI review'],
+    features: ['All Ace OS products available', 'Dedicated automation engineer', '24/7 priority support, fixes within 4 hours', 'Custom integrations & AI agents', 'Quarterly ROI review'],
   },
 ]
 
