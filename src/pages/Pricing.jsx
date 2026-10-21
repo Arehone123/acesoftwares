@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { CtaBand, Faq, RoiCalculator, SectionHead, Tiers } from '../components/Blocks.jsx'
-import { faqs, FEE_SHARE, RETAINER_RATE } from '../data/site.js'
+import { faqs, offers, FEE_SHARE, RETAINER_RATE } from '../data/site.js'
+import { Tilt } from '../components/Motion.jsx'
+import { offerPrice } from './Events.jsx'
 
 const steps = [
   ['search', 'Free audit', 'We map the manual process with you and time how long it takes each week.'],
@@ -14,7 +16,7 @@ const steps = [
 const split = [
   ['You pay us', [`Product retainer at R${RETAINER_RATE}/hour`, `Workflow fees: ${Math.round(FEE_SHARE * 100)}% of the value of hours saved`, 'Custom builds, if scoped separately']],
   ['You pay providers directly', ['n8n Cloud or your own server', 'AI API usage (OpenAI, Anthropic)', 'WhatsApp Business, Twilio and other SaaS']],
-  ['Always included', ['Free discovery audit', 'Documentation & handover', 'Failure alerts, retries and monitoring']],
+  ['Always included', ['24/7 customer support', 'Free discovery audit', 'Documentation & handover', 'Failure alerts, retries and monitoring']],
 ]
 
 export default function Pricing() {
@@ -69,6 +71,24 @@ export default function Pricing() {
           <SectionHead title="What would one workflow save you?" sub="Enter the numbers for one manual process. The estimate updates as you go." />
           <RoiCalculator />
           <p className="center muted small">This is an estimate. The final saving is agreed in your free audit and measured from n8n execution logs.</p>
+        </div>
+      </section>
+
+      <section className="section section--flush">
+        <div className="container">
+          <SectionHead title="Training, workshops & pilots" sub="Start learning for free, train your whole team, or prove the value with a pilot." />
+          <div className="offers">
+            {offers.map((o) => (
+              <Tilt key={o.id} className={`offer ${o.id === 'workshops' ? 'offer--free' : ''}`}>
+                <span className="tag">{o.tag}</span>
+                <span className="offer__icon"><Icon name={o.icon} size={22} /></span>
+                <h3>{o.title}</h3>
+                <p>{o.text}</p>
+                <div className="offer__price">{offerPrice(o)}</div>
+                <Link to="/events" className="ulink">Learn more</Link>
+              </Tilt>
+            ))}
+          </div>
         </div>
       </section>
 

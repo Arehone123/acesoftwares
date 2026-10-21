@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
-import { CONTACT_EMAIL, tiers } from '../data/site.js'
+import { CONTACT_EMAILS, SUPPORT_HOURS, tiers } from '../data/site.js'
 
-const interests = ['Not sure yet — audit me', ...tiers.map((t) => `Apps — ${t.name}`), 'Workflows — pay per hour saved']
+const interests = ['Not sure yet — audit me', ...tiers.map((t) => `Apps — ${t.name}`), 'Workflows — pay per hour saved', 'Free n8n workshop', 'Corporate training', 'Pilot implementation']
 
 export function Contact() {
   const { state } = useLocation()
@@ -22,7 +22,7 @@ export function Contact() {
     e.preventDefault()
     const subject = `Automation audit request — ${form.company || form.name}`
     const body = [`Name: ${form.name}`, `Company: ${form.company}`, `Email: ${form.email}`, `Interested in: ${form.interest}`, '', form.message].join('\n')
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    window.location.href = `mailto:${CONTACT_EMAILS.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     setSent(true)
   }
 
@@ -38,7 +38,16 @@ export function Contact() {
             <li><Icon name="check" size={15} />Hours-saved estimate for each process</li>
             <li><Icon name="check" size={15} />Recommended product or workflow</li>
           </ul>
-          <p className="muted small">Prefer email? <a className="ulink" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+          <div className="contact__cards">
+            <div className="support__card support__card--mini">
+              <span className="support__big">{SUPPORT_HOURS}</span>
+              <p><b>Support for every client.</b> Workflows are monitored around the clock, and you can reach us any time.</p>
+            </div>
+            <div className="contact__emails">
+              <p className="mono-label">EMAIL US</p>
+              {CONTACT_EMAILS.map((e) => <a key={e} className="contact__email" href={`mailto:${e}`}><Icon name="mail" size={16} /> {e}</a>)}
+            </div>
+          </div>
         </div>
         <form className="cform" onSubmit={submit}>
           <div className="cform__row">
@@ -52,7 +61,7 @@ export function Contact() {
           <label><span>WHAT PROCESS TAKES THE MOST TIME?</span><textarea rows={5} value={form.message} onChange={up('message')} /></label>
           <button type="submit" className="btn btn--accent btn--block">BOOK MY FREE AUDIT</button>
           <p className="muted small center">
-            {sent ? `Thanks! If your email app didn’t open, write to ${CONTACT_EMAIL}.` : 'This opens your email app with the details filled in.'}
+            {sent ? `Thanks! If your email app didn’t open, write to ${CONTACT_EMAILS.join(' or ')}.` : 'This opens your email app with the details filled in.'}
           </p>
         </form>
       </div>

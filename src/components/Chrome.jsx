@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import { apps } from '../data/apps.js'
 import { solutions } from '../data/solutions.js'
-import { partners, CONTACT_EMAIL } from '../data/site.js'
+import { partners, CONTACT_EMAILS, SUPPORT_HOURS } from '../data/site.js'
 
 export function Logo({ light = false }) {
   return (
@@ -26,6 +26,7 @@ const menus = {
     ...solutions.map((s) => ({ to: `/solutions/${s.id}`, icon: s.id === 'it-ops' ? 'server' : s.id === 'finance-ops' ? 'wallet' : 'pickaxe', title: s.nav, text: s.title })),
     { to: '/workflows', icon: 'workflow', title: 'Workflow library', text: 'Ready-to-deploy automations' },
     { to: '/integrations', icon: 'zap', title: 'Integrations', text: 'Tools we connect to' },
+    { to: '/events', icon: 'users', title: 'Events & training', text: 'Free n8n workshops, corporate training, pilots' },
   ],
 }
 
@@ -67,6 +68,7 @@ export function Nav() {
           <NavLink to="/workflows" className="nav__link">WORKFLOWS</NavLink>
           <NavLink to="/integrations" className="nav__link">INTEGRATIONS</NavLink>
           <NavLink to="/pricing" className="nav__link">PRICING</NavLink>
+          <NavLink to="/events" className="nav__link">EVENTS <span className="nav__free">FREE</span></NavLink>
           <Link to="/contact" className="btn btn--accent nav__mobile-cta">BOOK AN AUDIT</Link>
         </nav>
         <div className="nav__right">
@@ -98,8 +100,9 @@ export function Footer() {
       <div className="footer__inner">
         <div className="footer__brand">
           <Logo light />
-          <p>An automation agency building business operating systems and n8n workflows.</p>
-          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+          <p>An automation agency building business operating systems and n8n workflows, with {SUPPORT_HOURS} support for every client.</p>
+          {CONTACT_EMAILS.map((e) => <a key={e} href={`mailto:${e}`}>{e}</a>)}
+          <span className="footer__support"><i className="live" /> {SUPPORT_HOURS} SUPPORT · ALWAYS ON</span>
         </div>
         <div className="footer__cols">
           <div>
@@ -115,6 +118,8 @@ export function Footer() {
           <div>
             <h5>COMPANY</h5>
             <Link to="/pricing">PRICING</Link>
+            <Link to="/events">FREE WORKSHOPS</Link>
+            <Link to="/events#training">CORPORATE TRAINING</Link>
             <Link to="/contact">CONTACT</Link>
             <Link to="/contact">BOOK AN AUDIT</Link>
             {partners.map((p) => (

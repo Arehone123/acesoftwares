@@ -5,7 +5,10 @@ import Icon from '../components/Icon.jsx'
 import { CtaBand, Mono, SectionHead, WorkflowCard } from '../components/Blocks.jsx'
 import { apps } from '../data/apps.js'
 import { workflows, workflowBySlug } from '../data/workflows.js'
-import { partners, RETAINER_RATE, FEE_SHARE } from '../data/site.js'
+import { partners, offers, RETAINER_RATE, FEE_SHARE, CONTACT_EMAILS, SUPPORT_HOURS } from '../data/site.js'
+import { integrations } from '../data/integrations.js'
+import { CountUp, Marquee, Rotator, Tilt } from '../components/Motion.jsx'
+import { offerPrice } from './Events.jsx'
 
 const heroFlow = [
   [['New enquiry', 'webhook', 'Webhook']],
@@ -60,9 +63,11 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      <section className="hero">
+      <section className="hero hero--aurora">
+        <div className="aurora" aria-hidden="true"><i /><i /><i /></div>
         <div className="container hero__copy">
-          <h1>Run the business.<br />Let the workflows do the work.</h1>
+          <Link to="/events" className="hero__badge"><span className="tag tag--accent">NEW</span> Free n8n workshops, sponsored by n8n <Icon name="arrow" size={13} /></Link>
+          <h1>Run the business.<br />Let the workflows do the <Rotator words={['invoicing.', 'hiring.', 'tendering.', 'reporting.', 'follow-ups.', 'work.']} /></h1>
           <p className="lead">
             AceSoftwares builds the operating systems and n8n workflows that take repetitive work off your team.
             Every step stays visible, so you can see what it does and explain it to anyone.
@@ -71,11 +76,21 @@ export default function Home() {
             <Link to="/contact" className="btn btn--accent">BOOK A FREE AUDIT</Link>
             <Link to="/pricing" className="btn btn--grey">SEE PRICING</Link>
           </div>
+          <p className="hero__support"><i className="live" /> {SUPPORT_HOURS} support for every client</p>
         </div>
-        <div className="container container--wide">
+        <div className="container container--wide hero__canvas">
           <Flow columns={heroFlow} theme="light" tools maxScale={1.1} />
           <p className="hero__hint mono-label">CLICK ANY STEP TO INSPECT IT</p>
         </div>
+      </section>
+
+      {/* TOOLS TICKER */}
+      <section className="ticker">
+        <Marquee speed={45}>
+          {integrations.slice(0, 22).map((i) => (
+            <span key={i.name} className="ticker__item"><Mono name={i.name} /> {i.name}</span>
+          ))}
+        </Marquee>
       </section>
 
       {/* PRODUCT STRIP */}
@@ -112,6 +127,17 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* STATS BAND */}
+      <section className="container">
+        <div className="stats">
+          <div className="stat"><b><CountUp to={apps.length} /></b><span>business OS products</span></div>
+          <div className="stat"><b><CountUp to={workflows.length} />+</b><span>ready-made workflows</span></div>
+          <div className="stat"><b><CountUp to={integrations.length} />+</b><span>tools we connect</span></div>
+          <div className="stat"><b>{SUPPORT_HOURS}</b><span>client support</span></div>
+          <div className="stat"><b><CountUp to={RETAINER_RATE} prefix="R" /></b><span>per retainer hour</span></div>
         </div>
       </section>
 
@@ -194,12 +220,12 @@ export default function Home() {
           <SectionHead title="Our products" sub="Each product is a full web app for one part of your business, with n8n workflows running behind it." />
           <div className="prodgrid">
             {apps.map((a) => (
-              <Link key={a.id} to={`/products/${a.id}`} className="prod" style={{ '--app': a.color }}>
+              <Tilt key={a.id} as={Link} to={`/products/${a.id}`} className="prod" style={{ '--app': a.color }}>
                 <span className="prod__icon"><Icon name={a.icon} size={24} /></span>
                 <h3>{a.name}</h3>
                 <p>{a.tagline}</p>
                 <span className="prod__go mono-label">VIEW PRODUCT <Icon name="arrow" size={13} /></span>
-              </Link>
+              </Tilt>
             ))}
           </div>
         </div>
@@ -222,6 +248,50 @@ export default function Home() {
               <p>We measure the hours a workflow saves you and charge a share of their value. If it saves nothing, you pay nothing.</p>
               <Link to="/pricing#roi" className="ulink">Calculate your savings</Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 24/7 SUPPORT */}
+      <section className="section section--flush">
+        <div className="container">
+          <div className="support">
+            <div className="support__card">
+              <div className="support__rings" aria-hidden="true"><i /><i /><i /></div>
+              <span className="support__big">{SUPPORT_HOURS}</span>
+              <span className="mono-label">CUSTOMER SUPPORT</span>
+            </div>
+            <div className="support__copy">
+              <h2>Support that never clocks out</h2>
+              <p className="muted">Every AceSoftwares client gets 24/7 support. Your workflows are monitored around the clock, failures alert us straight away, and you can reach a real person any time, day or night, weekends included.</p>
+              <ul className="ticks">
+                <li><Icon name="check" size={15} />Round-the-clock workflow monitoring & failure alerts</li>
+                <li><Icon name="check" size={15} />Reach us any time by email</li>
+                <li><Icon name="check" size={15} />Guaranteed fix times on every retainer plan</li>
+              </ul>
+              <div className="support__emails">
+                {CONTACT_EMAILS.map((e) => <a key={e} href={`mailto:${e}`} className="stackchip"><Icon name="mail" size={14} /> {e}</a>)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* EVENTS & TRAINING */}
+      <section className="section">
+        <div className="container">
+          <SectionHead title={<>Learn n8n <span className="hl">for free</span></>} sub="Our community workshops and events are sponsored by n8n, so they're free to attend. For teams who want more, we offer exclusive corporate training and pilot implementations." />
+          <div className="offers">
+            {offers.map((o) => (
+              <Tilt key={o.id} as={Link} to="/events" className={`offer ${o.id === 'workshops' ? 'offer--free' : ''}`}>
+                <span className="tag">{o.tag}</span>
+                <span className="offer__icon"><Icon name={o.icon} size={22} /></span>
+                <h3>{o.title}</h3>
+                <p>{o.text}</p>
+                <div className="offer__price">{offerPrice(o)}</div>
+                <span className="ulink">{o.cta.charAt(0) + o.cta.slice(1).toLowerCase()}</span>
+              </Tilt>
+            ))}
           </div>
         </div>
       </section>
